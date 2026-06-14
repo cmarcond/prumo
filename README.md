@@ -72,6 +72,11 @@ comandos referem-se a `.prumo/…` para **leitura**.
 > O benchmark alimenta o agente **só com o intent fino** (ou um prompt genérico) —
 > nunca com os requisitos prontos. Derivar os requisitos é parte do que se mede.
 
+**Entrada auxiliar.** `/prumo.reverse` faz o caminho inverso: parte de um **projeto
+existente** (path) e reconstrói o *seed* (enunciado do problema + Problem Gates) que,
+dado ao `/prumo.init`, regeneraria aquele design. Valide por round-trip rodando o
+seed pelo fluxo e comparando o `design.json` com os componentes reais do projeto.
+
 ## Instalação
 ```
 python3 install.py /caminho/do/projeto-alvo

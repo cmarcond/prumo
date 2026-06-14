@@ -18,7 +18,7 @@ import argparse, filecmp, shutil, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-COMMANDS = ["init", "requirements", "design", "evaluate", "publish", "status"]
+COMMANDS = ["init", "requirements", "design", "evaluate", "publish", "status", "reverse"]
 # top-level files + trees copiados para .prumo/
 FILES = ["MANIFESTO.md"]
 TREES = ["gates", "skills", "commands", "templates", "docs"]
