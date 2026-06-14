@@ -1,7 +1,14 @@
 # /prumo.evaluate — Rubrica + auditoria de contexto limpo + ratchet
 
 Avalia o design final de um problema. Pré-condição: `/prumo.design` convergiu
-(gates verdes). Saídas: `evaluation/<slug>.md` + `ratchet.json` atualizado.
+(gates verdes). Saídas (na **raiz do projeto**): `evaluation/<slug>.md` +
+`ratchet.json` atualizado.
+
+> **Caminhos:** `evaluation/` e `ratchet.json` vão na **raiz**; o framework
+> (`gates/`, `skills/`, `templates/`) é lido de `.prumo/`. Convenção completa em
+> `/prumo.init`. Exceção deliberada: promover um gate/skill (Passo 4) **edita** o
+> framework em `.prumo/gates/gates.md` ou `.prumo/skills/` — é mudança do *método*,
+> que deve voltar para o repo do Prumo, não um resultado do problema.
 
 ## Dois modos
 - **Benchmark** (existe ground truth do mestre): compare `design/v_final` contra
@@ -41,4 +48,6 @@ Guarde a progressão de versões (v1→vN) e o piso por dimensão.
 ## Passo 4 — Encerramento
 Resuma: verdict, scores por dimensão, gates que exigiram iteração, e (se
 benchmark) as divergências do mestre — cada divergência é candidata a **novo
-gate** (`gates/gates.md`) ou nova skill. Lacuna vira conhecimento incorporado.
+gate** (`.prumo/gates/gates.md`) ou nova skill (`.prumo/skills/`). Lacuna vira
+conhecimento incorporado. Promover é mudança **do método** (volta para o repo do
+Prumo), distinta dos resultados na raiz; faça-a deliberadamente, não em silêncio.

@@ -26,6 +26,34 @@ catraca, só que sobre o design. Uma **catraca** (ratchet) trava o melhor result
 | Memória | `templates/ratchet.json` | piso de qualidade que só sobe |
 | Schemas | `templates/schemas/` | formato de requirements / design / scores |
 
+## Layout no projeto — framework × resultados
+O instalador cria `.prumo/` no projeto alvo. Vale a separação:
+
+- **`.prumo/` = framework/método** (MANIFESTO, `gates/`, `skills/`, `templates/`,
+  `commands/`, `docs/`). Compartilhado entre projetos; só muda **deliberadamente**
+  ao promover um novo gate/skill — e essa mudança é do *método*, que volta para
+  este repo (`prumo`), não um subproduto de um problema.
+- **Raiz do projeto = resultados** do problema, gravados pelos comandos:
+  `questions.md` (Problem Gates respondidos), `intent.json`, `requirements.json`,
+  `requirements-critique.md`, `design/v1..vN/` + `design/v_final`, `evaluation/`,
+  `ratchet.json`.
+
+```
+projeto/
+├── questions.md            # respostas dos Problem Gates (resultado)
+├── intent.json             # resultado
+├── requirements.json       # resultado
+├── requirements-critique.md
+├── design/ v1.. v_final/   # resultado
+├── evaluation/             # resultado
+├── ratchet.json            # resultado (piso de qualidade)
+└── .prumo/                 # FRAMEWORK (método): gates, skills, templates, …
+```
+
+O template `.prumo/gates/questions.md` fica **em branco**; o `init` o lê e grava as
+respostas em `./questions.md`. Citações a `gates/…`, `skills/…`, `templates/…` nos
+comandos referem-se a `.prumo/…` para **leitura**.
+
 ## Fluxo
 1. `/prumo.init` — Problem Gates (o agente **sugere**, o dono confirma) → `intent.json`
    **fino** (problema + escopo do dono + contexto qualitativo; sem lista derivada).

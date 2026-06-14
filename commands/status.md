@@ -1,9 +1,13 @@
 # /prumo.status — Reconciliar estado
 
-Use após editar uma resposta em `gates/questions.md` ou retomar trabalho.
+Use após editar uma resposta em `./questions.md` (raiz) ou retomar trabalho.
 
-1. Releia `questions.md`, `intent.json`, `requirements.json` e a última versão em
-   `design/`.
+> **Caminhos:** os resultados (`questions.md`, `intent.json`, `requirements.json`,
+> `design/`, `evaluation/`, `ratchet.json`) ficam na **raiz**; o framework é lido de
+> `.prumo/`. Convenção completa em `/prumo.init`.
+
+1. Releia `./questions.md`, `./intent.json`, `./requirements.json` e a última versão
+   em `./design/` (tudo na raiz).
 2. Se uma Problem Gate mudou: marque os artefatos afetados (intent/requirements/
    design) e proponha a reconciliação (ex.: mudou a razão read:write → re-rodar o
    gargalo e os gates de capacidade/amplificação).

@@ -1,7 +1,18 @@
 # /prumo.init — Problem Gates → intent + requirements skeleton
 
-Roteiro de inicialização. Pré-condição: `.prumo/` instalado. Saídas:
-`questions.md` preenchido, `intent.json`, `requirements.json` (esqueleto).
+Roteiro de inicialização. Pré-condição: `.prumo/` instalado. Saídas (na **raiz do
+projeto**): `questions.md` preenchido, `intent.json`, `requirements.json` (esqueleto).
+
+> **Convenção de caminhos — framework × resultados.** `.prumo/` guarda o
+> **framework/método** (MANIFESTO, `gates/`, `skills/`, `templates/`, `docs/`),
+> compartilhado entre projetos: só muda **deliberadamente**, quando se promove um
+> novo gate/skill (mudança do *método*, que volta para o repo do Prumo) — nunca como
+> subproduto de um problema. Os **resultados** deste problema vão na **raiz do
+> projeto**: `questions.md`, `intent.json`, `requirements.json`,
+> `requirements-critique.md`, `design/`, `evaluation/`, `ratchet.json`. As respostas
+> dos Problem Gates são anotadas em `./questions.md` (raiz), **não** no template
+> `.prumo/gates/questions.md` (que fica em branco). Citações a `gates/…`, `skills/…`,
+> `templates/…` para **ler** referem-se a `.prumo/…`.
 
 ## Passo 0 — Modo e constituição
 - Modo guiado (default) ou automático (se o usuário pedir).
@@ -18,10 +29,11 @@ a base das **propostas** dos gates — o usuário não precisa chegar sabendo es
 nem consistência.
 
 ## Passo 1 — Problem Gates (A→E): sugerir, não interrogar
-O usuário pode ser **genérico**. Para CADA gate de `gates/questions.md`, o agente
-**propõe** uma resposta derivada do Passo 0.5, com uma linha de justificativa, e
-pede só confirmação — nunca deixa a pergunta aberta para o usuário preencher do
-zero. Regras:
+O usuário pode ser **genérico**. Leia as perguntas do **template**
+`.prumo/gates/questions.md` (em branco — NÃO o edite) e grave as respostas em
+`./questions.md` na **raiz**. Para CADA gate, o agente **propõe** uma resposta
+derivada do Passo 0.5, com uma linha de justificativa, e pede só confirmação —
+nunca deixa a pergunta aberta para o usuário preencher do zero. Regras:
 - **Guiado**: um gate por vez. Apresente a proposta ("Sugiro read-heavy ~100:1
   porque buscas/visualizações ≫ novas conexões; ok?"). O usuário confirma, ajusta
   ou pede alternativas. Grave com origem `proposto` (confirmado) ou `usuário`

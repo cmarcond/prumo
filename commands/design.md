@@ -3,8 +3,12 @@
 O coração do Prumo. Produz o design por **versões**, com os Design Gates
 reprovando entre elas, até verde. Pré-condição: `intent.json` (do `/prumo.init`) +
 `requirements.json` rico e completo (do **`/prumo.requirements`**, já passado pelo
-gate G-REQ-COMPLETENESS). Saídas: `design/v1..vN/{requirements.json,design.json,design.mmd,critique.md}`
-e `design/v_final` simbólico para a melhor versão.
+gate G-REQ-COMPLETENESS). Saídas (na **raiz do projeto**):
+`design/v1..vN/{requirements.json,design.json,design.mmd,critique.md}` e
+`design/v_final` simbólico para a melhor versão.
+
+> **Caminhos:** `design/` vai na **raiz**; o framework (`gates/`, `skills/`,
+> `templates/`) é lido de `.prumo/`. Convenção completa em `/prumo.init`.
 
 ## Princípio
 Nunca produza o design final de uma vez (zero-shot tende à "baseline neutra" e

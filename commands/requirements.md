@@ -3,7 +3,10 @@
 A fase que faltava. O `init` produz um **intent fino** (problema + escopo do dono
 + contexto qualitativo). Aqui o agente **deriva** os requisitos ricos — e derivar
 bem é uma skill sob teste, não um insumo dado. Pré-condição: `intent.json`.
-Saída: `requirements.json` (rico) + `requirements-critique.md`.
+Saída (na **raiz do projeto**): `requirements.json` (rico) + `requirements-critique.md`.
+
+> **Caminhos:** resultados vão na **raiz**; o framework (`gates/`, `skills/`,
+> `templates/`) é lido de `.prumo/`. Convenção completa em `/prumo.init`.
 
 > Regra de ouro (anti-vazamento): o `intent.json` NÃO contém a lista funcional
 > detalhada nem os números — se contiver, isso é vazamento da derivação. Esta
