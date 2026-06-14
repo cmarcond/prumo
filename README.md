@@ -22,7 +22,7 @@ catraca, só que sobre o design. Uma **catraca** (ratchet) trava o melhor result
 | Problem Gates | `gates/questions.md` | o que o **dono** decide (escopo, escala, garantias, custo) |
 | Design Gates | `gates/gates.md` | o que **reprova** um design (lints DET + verificadores ADV) |
 | Skills | `skills/` + `index.yaml` | o **como** projetar bem (cada skill conserta o gate que ela respalda) |
-| Comandos | `commands/` | `init` → `design` → `evaluate` → `status` |
+| Comandos | `commands/` | `init` → `requirements` → `design` → `evaluate` → `publish` |
 | Memória | `templates/ratchet.json` | piso de qualidade que só sobe |
 | Schemas | `templates/schemas/` | formato de requirements / design / scores |
 
@@ -64,6 +64,10 @@ comandos referem-se a `.prumo/…` para **leitura**.
    simplifica (refactor) → mutação (prova os gates).
 4. `/prumo.evaluate` — rubrica + auditoria de contexto limpo + ratchet. Em modo
    benchmark, compara contra o ground truth do mestre (o meta-gate).
+5. `/prumo.publish` — documento pedagógico da solução: decompõe o `design/v_final`
+   em figuras C4 (contexto→container→component) + sequências + cenários, monta um
+   LaTeX e gera `doc/solution.pdf` num container Docker (LaTeX+PlantUML). Gates
+   `G-DOC-LEGIBLE` / `G-DOC-PEDAGOGIC`.
 
 > O benchmark alimenta o agente **só com o intent fino** (ou um prompt genérico) —
 > nunca com os requisitos prontos. Derivar os requisitos é parte do que se mede.

@@ -1,0 +1,22 @@
+' Exemplo de DIAGRAMA DE SEQUENCIA — um fluxo passo a passo (ex.: upload, watch).
+' Sequencia mostra ORDEM e ASSINCRONIA (ack antes do fan-out, persist antes de visivel).
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+title Sequencia — <Fluxo, ex.: Upload>
+
+actor Criador as U
+participant "Control Service" as C
+database "Object Store" as O
+database "Metadata Store" as M
+queue "Fila" as Q
+
+U -> C : iniciar upload
+C --> U : URL pre-assinada
+U -> O : PUT bytes (direto)
+U -> C : finalize (idempotente)
+C -> M : record + outbox (txn, conditional)
+C --> U : ack 202 (antes do processamento)
+note over C,Q : o trabalho pesado segue assincrono
+M -> Q : (via CDC) job
+@enduml

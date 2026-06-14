@@ -18,7 +18,7 @@ import argparse, filecmp, shutil, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-COMMANDS = ["init", "requirements", "design", "evaluate", "status"]
+COMMANDS = ["init", "requirements", "design", "evaluate", "publish", "status"]
 # top-level files + trees copiados para .prumo/
 FILES = ["MANIFESTO.md"]
 TREES = ["gates", "skills", "commands", "templates", "docs"]
@@ -79,7 +79,8 @@ def main(argv=None):
     print(f"Prumo instalado em {prumo}")
     print(r.summary())
     print("\nPróximo passo: abra o agente no projeto e rode /prumo.init "
-          "(.prumo/commands/init.md). O fluxo é init → design → evaluate.")
+          "(.prumo/commands/init.md). O fluxo é "
+          "init → requirements → design → evaluate → publish.")
     return 0
 
 

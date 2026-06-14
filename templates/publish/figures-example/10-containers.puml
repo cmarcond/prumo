@@ -1,0 +1,22 @@
+' Exemplo de figura de CONTAINERS (C4 nivel 2) — os grandes blocos e o fluxo do dado.
+' Mapeie components do design.json: service->Container, datastore->ContainerDb,
+' broker/cache/cdn->Container com tag. Mantenha ~7-10 blocos por figura (legibilidade);
+' se passar disso, quebre por subsistema e use zooms (component).
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Visao de containers — <Sistema>
+
+Person(user, "Usuario")
+System_Boundary(s, "<Sistema>") {
+  Container(api, "Servico de API", "stateless", "Plano de controle")
+  ContainerDb(meta, "Metadata Store", "DynamoDB", "Point-lookup por id")
+  ContainerDb(blob, "Object Store", "S3", "Blobs duraveis")
+  Container(edge, "CDN / Edge", "CDN", "Serve o conteudo quente")
+}
+
+Rel(user, api, "request", "HTTPS")
+Rel(api, meta, "le/escreve")
+Rel(user, edge, "baixa bytes", "HTTPS")
+Rel(edge, blob, "origin pull em miss")
+@enduml

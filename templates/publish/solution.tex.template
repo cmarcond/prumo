@@ -1,0 +1,116 @@
+% =====================================================================
+%  Template do /prumo.publish — documento pedagógico da solução.
+%  O agente COPIA este arquivo para  doc/solution.tex  e preenche os
+%  blocos marcados  % >>> PRUMO ... <<<  com o conteúdo do problema.
+%  Compila com pdflatex/latexmk (ver templates/publish/build.sh).
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figures/pdf/}}
+\captionsetup{font=small,labelfont=bf}
+
+% --- macro de figura pedagógica: limita à página (legibilidade) + texto guia ---
+% \prumofig{arquivo-sem-extensao}{legenda}{explicação em prosa após a figura}
+\newcommand{\prumofig}[3]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.80\textheight,keepaspectratio]{#1}
+    \caption{#2}
+  \end{figure}%
+  \noindent #3\par\medskip
+}
+% caixa de destaque simples
+\newcommand{\prumokey}[1]{\par\noindent\textbf{Em uma frase:} \emph{#1}\par\medskip}
+
+\title{\textbf{% >>> PRUMO:TITLE — nome do sistema projetado <<<}\\[0.3em]
+       \large Documento de System Design}
+\author{Gerado por Prumo — \texttt{/prumo.publish}}
+\date{% >>> PRUMO:DATE <<<}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\begin{abstract}
+\noindent % >>> PRUMO:ABSTRACT — 4–6 linhas em linguagem simples: que sistema é,
+% para quem, e qual a restrição dominante (o binder). Sem jargão. <<<
+\end{abstract}
+\tableofcontents
+\clearpage
+
+% =====================================================================
+\section{O problema em linguagem simples}
+% >>> PRUMO:PROBLEM — explique o problema como para alguém não-técnico:
+% quem usa, o que faz, por que é difícil. <<<
+
+\section{Requisitos}
+\subsection{O que o sistema faz (funcionais)}
+% >>> PRUMO:FUNCTIONAL — lista enxuta em prosa/bullets, sem copiar JSON. <<<
+
+\subsection{Capacidade e demanda (não-funcionais) — o coração do dimensionamento}
+% >>> PRUMO:NFR-CAPACITY — EXPLIQUE em linguagem simples os números de escala:
+% o que cada número significa no mundo real, de onde veio (a conta), e qual deles
+% é a RESTRIÇÃO LIMITANTE (binder). Use a tabela abaixo. <<<
+\prumokey{% >>> PRUMO:BINDER — a restrição que manda na arquitetura <<<}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}llp{6.5cm}@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Ordem} & \textbf{O que significa / de onde vem} \\
+\midrule
+% >>> PRUMO:SCALE-ROWS — uma linha por número-chave (egress, storage, QPS...) <<<
+\bottomrule
+\end{tabular}
+\caption{Dimensionamento — números com a conta por trás.}
+\end{table}
+
+\subsection{Garantias e tolerâncias}
+% >>> PRUMO:GUARANTEES — consistência×disponibilidade, durabilidade, staleness
+% tolerada, invariantes. Diga o que o sistema NÃO paga (alavancas). <<<
+
+% =====================================================================
+\section{Decisões de projeto (system design)}
+% >>> PRUMO:DECISIONS — uma subseção por decisão grande. Para cada uma:
+% (a) qual pressão/binder ela alivia, (b) a alternativa naive rejeitada e por quê,
+% (c) o trade-off. É a parte mais textual/pedagógica. <<<
+
+% =====================================================================
+\section{Arquitetura — visão geral}
+\prumofig{00-context}{Visão de contexto: o sistema e seus atores.}{%
+% >>> PRUMO:FIG-CONTEXT-TEXT — leia a figura para o leitor. <<<}
+
+\prumofig{10-containers}{Visão de containers: os grandes blocos e como o dado flui.}{%
+% >>> PRUMO:FIG-CONTAINERS-TEXT <<<}
+
+\section{Zoom nas partes}
+% Uma figura de componente por subsistema relevante (ingestão, serventia, ...).
+\prumofig{20-component-<parte>}{Zoom: <parte>.}{%
+% >>> PRUMO:FIG-ZOOM-TEXT — repita o par figura+texto por subsistema <<<}
+
+\section{Fluxos passo a passo (diagramas de sequência)}
+\prumofig{seq-<fluxo>}{Sequência: <fluxo principal>.}{%
+% >>> PRUMO:FIG-SEQ-TEXT — uma sequência por fluxo (ex.: upload, watch) <<<}
+
+\section{Cenários}
+% Falha parcial, pico/viral, deleção concorrente — uma figura por cenário.
+\prumofig{scenario-<nome>}{Cenário: <nome>.}{%
+% >>> PRUMO:FIG-SCENARIO-TEXT <<<}
+
+\end{document}

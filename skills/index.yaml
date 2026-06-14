@@ -82,3 +82,7 @@ skills:
     path: skills/enumerate-variations/SKILL.md
     backs_gates: [G-ENUMERATE-VARIATIONS]
     description: "Nomeie os eixos de variação do problema e desenhe as variações distintas (ou justifique colapsar)."
+  - id: decompose-diagram-for-teaching
+    path: skills/decompose-diagram-for-teaching/SKILL.md
+    backs_gates: [G-DOC-LEGIBLE, G-DOC-PEDAGOGIC]
+    description: "Quebre o design em vistas C4 (contexto→container→component) + sequências + cenários, cada figura legível e narrada (fase publish)."

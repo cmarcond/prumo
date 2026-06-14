@@ -1,0 +1,20 @@
+' Exemplo de figura de COMPONENTE (C4 nivel 3) — ZOOM num subsistema.
+' Use uma destas por subsistema relevante (ex.: pipeline de ingestao, plano de serventia).
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Zoom — <Subsistema, ex.: Pipeline de Ingestao>
+
+Container_Boundary(b, "Ingestao") {
+  Component(ctrl, "Control Service", "stateless", "Valida, grava record+outbox")
+  Component(disp, "Dispatcher", "CDC", "outbox -> fila; reconcilia")
+  Component(work, "Workers", "fleet", "Processamento pesado")
+}
+ContainerDb(meta, "Metadata Store", "DynamoDB")
+ContainerQueue(q, "Fila", "Kafka")
+
+Rel(ctrl, meta, "record + outbox (txn)")
+Rel(disp, meta, "le outbox")
+Rel(disp, q, "publica job")
+Rel(q, work, "entrega (pull)")
+@enduml
