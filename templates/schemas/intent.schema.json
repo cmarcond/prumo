@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "intent.schema.json",
+  "title": "Stage 06 — intent (benchmark seed; no solution leakage)",
+  "type": "object",
+  "required": ["video_id", "problem", "goal", "scope_in", "scope_out", "context_assumptions", "source", "confidence"],
+  "additionalProperties": true,
+  "properties": {
+    "video_id": {"type": "string", "minLength": 11, "maxLength": 11},
+    "problem": {"type": "string", "description": "what to build, in problem terms — NO components/tech/patterns"},
+    "goal": {"type": "string"},
+    "scope_in": {"type": "array", "items": {"type": "string"}},
+    "scope_out": {"type": "array", "items": {"type": "string"}},
+    "context_assumptions": {"type": "array", "items": {"type": "string"}, "description": "qualitative only, no precise scale numbers"},
+    "source": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "t", "quote"],
+        "additionalProperties": true,
+        "properties": {
+          "field": {"type": "string"},
+          "t": {"type": "number", "minimum": 0},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "leak_check": {"type": "string"},
+    "confidence": {"type": "string"}
+  }
+}

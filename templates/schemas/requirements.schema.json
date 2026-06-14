@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "requirements.schema.json",
+  "title": "Stage 07 — requirements extracted from the transcript",
+  "type": "object",
+  "required": ["video_id", "problem_hint", "functional", "non_functional", "scale", "confidence"],
+  "additionalProperties": true,
+  "properties": {
+    "video_id": {"type": "string", "minLength": 11, "maxLength": 11},
+    "problem_hint": {"type": "string"},
+    "functional": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["req"],
+        "additionalProperties": true,
+        "properties": {
+          "req": {"type": "string"},
+          "t": {"type": "number"},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "non_functional": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["req"],
+        "additionalProperties": true,
+        "properties": {
+          "req": {"type": "string"},
+          "category": {"type": "string"},
+          "t": {"type": "number"},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "scale": {"type": "object", "description": "flexible dict — only numbers he actually states", "additionalProperties": true},
+    "estimations": {"type": "array", "items": {"type": "object", "additionalProperties": true}},
+    "assumptions": {"type": "array"},
+    "entities": {"type": "array"},
+    "data_sources_referenced": {"type": "array"},
+    "meta_notes": {"type": "array", "description": "his commentary on numbers/choices — method tells"},
+    "open_questions": {"type": "array"},
+    "confidence": {"type": "string"}
+  }
+}

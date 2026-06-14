@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scores.schema.json",
+  "title": "Stage 10 — reproduction benchmark scores (agent vs instructor ground truth)",
+  "type": "object",
+  "required": ["video_id", "dimensions", "overall"],
+  "additionalProperties": true,
+  "properties": {
+    "video_id": {"type": "string", "minLength": 11, "maxLength": 11},
+    "run_id": {"type": "string"},
+    "model": {"type": "string"},
+    "held_out": {"type": "boolean", "description": "true if this video was NOT used to build the skills"},
+    "ground_truth_ref": {
+      "type": "object",
+      "description": "the instructor artifacts compared against",
+      "additionalProperties": true,
+      "properties": {
+        "requirements": {"type": "string", "default": "requirements.json"},
+        "design": {"type": "string", "default": "design.json"}
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "required": ["requirements_coverage", "estimation_fidelity", "design_match", "criteria_coverage"],
+      "additionalProperties": true,
+      "properties": {
+        "requirements_coverage": {"$ref": "#/$defs/dim"},
+        "estimation_fidelity": {"$ref": "#/$defs/dim"},
+        "design_match": {"$ref": "#/$defs/dim"},
+        "criteria_coverage": {"$ref": "#/$defs/dim"},
+        "baseline_gap": {"$ref": "#/$defs/dim"}
+      }
+    },
+    "overall": {"type": "number", "minimum": 0, "maximum": 1},
+    "confidence": {"type": "string"}
+  },
+  "$defs": {
+    "dim": {
+      "type": "object",
+      "required": ["score"],
+      "additionalProperties": true,
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

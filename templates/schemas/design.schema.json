@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "design.schema.json",
+  "title": "Stage 08 — final design (ground truth for diagram comparison)",
+  "type": "object",
+  "required": ["video_id", "problem_hint", "source", "components", "edges", "confidence", "partial"],
+  "additionalProperties": true,
+  "properties": {
+    "video_id": {"type": "string", "minLength": 11, "maxLength": 11},
+    "problem_hint": {"type": "string"},
+    "source": {
+      "type": "object",
+      "required": ["frames"],
+      "additionalProperties": true,
+      "properties": {
+        "frames": {"type": "array", "items": {"type": "string"}},
+        "design_finalized_t": {"type": "number"},
+        "method": {"type": "string"}
+      }
+    },
+    "components": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type"],
+        "additionalProperties": true,
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "type": {"type": "string", "description": "client|service|load_balancer|broker|datastore|cache|cdn|external|..."}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "additionalProperties": true,
+        "properties": {
+          "from": {"type": "string"},
+          "to": {"type": "string"},
+          "label": {"type": "string"}
+        }
+      }
+    },
+    "tech_choices": {"type": "array"},
+    "schema_notes": {"type": "array"},
+    "approaches": {"type": "array", "description": "non-final approaches he drew/discussed"},
+    "annotations": {"type": "array"},
+    "notes": {"type": "string"},
+    "partial": {"type": "boolean", "description": "true if the canvas could not be fully captured"},
+    "confidence": {"type": "string"}
+  }
+}
