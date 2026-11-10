@@ -1,10 +1,22 @@
 # Prumo — framework agêntico de System Design
 
+> **English summary.** Prumo ("plumb line") is an agentic framework for system
+> design, the sibling of [catraca](https://github.com/cmarcond/catraca). Instead of
+> letting an agent produce a zero-shot design, it makes the agent design in
+> versions (v1 → v2 → …) while **design-reasoning gates** fail each version until
+> it passes, the same red → green → refactor loop applied to design. A ratchet
+> locks in the best result. It is a layer of Markdown/YAML files (gates, skills,
+> commands, schemas) installed into `.prumo/`; the host agent executes. The gates
+> and skills were distilled from a corpus of real system-design interviews.
+> Status: v0. On held-out problems, blind reproduction of the reference design
+> rose from about 0.63 (zero-shot) to about 0.75 (versioned with gates). The rest
+> of this README is in Portuguese.
+
 O **prumo** é o fio que verifica se algo está alinhado contra uma referência
 verdadeira. Aqui a referência é o que o sistema precisa atender; os **gates**
 verificam se o design está "no prumo".
 
-Irmão do [`catraca`](../catraca) (spec-driven TDD) — mesma filosofia (artefatos
+Irmão do [`catraca`](https://github.com/cmarcond/catraca) (spec-driven TDD) — mesma filosofia (artefatos
 de texto que guiam um agente; o agente executa), aplicada a system design.
 Destilado de um corpus real de entrevistas de system design; ver
 `docs/method-patterns.md` e `docs/catraca-study.md`.
@@ -89,3 +101,7 @@ skills + gates) sobe de ~0.63 (zero-shot) para ~0.75 (versionado com gates). Os
 gates DET ainda dependem de anotações no `design.json`; o loop-until-green hoje é
 roteiro de comando, não runner automatizado. Próximos: automatizar o loop,
 engrossar gates/skills com o corpus completo (82 vídeos), triangular a avaliação.
+
+## Licença
+
+MIT. Veja [LICENSE](LICENSE).
