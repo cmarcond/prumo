@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "requirements.schema.json",
-  "title": "Stage 07 — requirements extracted from the transcript",
+  "title": "Requirements",
   "type": "object",
   "required": ["video_id", "problem_hint", "functional", "non_functional", "scale", "confidence"],
   "additionalProperties": true,

@@ -12,7 +12,7 @@ skills:
     description: "Estimate the bottleneck candidates (bandwidth/CPU/storage/throughput/fan-out) and design for the one that limits."
   - id: choose-datastore-by-access-pattern
     path: skills/choose-datastore-by-access-pattern/SKILL.md
-    backs_gates: [G-INLINE, G-FREETEXT]
+    backs_gates: [G-FREETEXT]
     description: "Choose the DB/index by the read:write ratio and the shape of the query; the simplest technology that fits."
   - id: partition-keys-and-hot-partitions
     path: skills/partition-keys-and-hot-partitions/SKILL.md
@@ -24,7 +24,7 @@ skills:
     description: "Enumerate partial failures first; persist the key before the call; order with the least-bad failure."
   - id: exploit-tolerated-weakness
     path: skills/exploit-tolerated-weakness/SKILL.md
-    backs_gates: [G-LEVER]
+    backs_gates: [G-LEVER, G-CACHE-POPULAR-NOT-ALL]
     description: "Use what the problem tolerates (staleness/approximation) as a lever; do not pay for an unnecessary guarantee."
   - id: decouple-with-async-propagation
     path: skills/decouple-with-async-propagation/SKILL.md
@@ -36,7 +36,7 @@ skills:
     description: "Blobs in the object store via URL; never through the app servers; the mapping in the DB."
   - id: scope-defer-and-blackbox
     path: skills/scope-defer-and-blackbox/SKILL.md
-    backs_gates: [G-SCOPE]
+    backs_gates: []
     description: "Self-contained sub-problem → a named black box; build the core from scratch before collapsing into managed."
   - id: iterate-naive-to-optimal
     path: skills/iterate-naive-to-optimal/SKILL.md
@@ -44,11 +44,11 @@ skills:
     description: "Naive → expose the failure → refine; name the rejected alternative; select by one decisive criterion."
   - id: ml-system-design
     path: skills/ml-system-design/SKILL.md
-    backs_gates: [G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-TRAIN-SERVE-PARITY]
+    backs_gates: [G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-COLD-START, G-ML-FEATURE-ENG]
     description: "System design method with ML: approach derived from the requirement, two-stage retrieval, persist the model, train/serve parity, metric by cost of error."
   - id: separate-operational-from-analytical
     path: skills/separate-operational-from-analytical/SKILL.md
-    backs_gates: [G-OLTP-OLAP]
+    backs_gates: [G-OLTP-OLAP, G-NO-DUAL-WRITES]
     description: "Take analytical reads/training off the operational store; analytics via CDC to a warehouse/lake."
   - id: persist-before-external-visibility
     path: skills/persist-before-external-visibility/SKILL.md

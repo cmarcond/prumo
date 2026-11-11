@@ -41,7 +41,7 @@ point where system design diverges.
 | Catraca | Prumo (system design) |
 |---|---|
 | Constitution (`MANIFESTO`) | inherited, rewritten for design (see `MANIFESTO.md`) |
-| Skills with Anti-Patterns | inherited — 9 design-method skills |
+| Skills with Anti-Patterns | inherited — the design-method skills in `skills/` (listed in `skills/index.yaml`) |
 | User Feedback Gates (questions) | **Problem Gates** (`gates/questions.md`): scope, scale, consistency×availability, SLA, budget |
 | Pipeline of automatic gates (lint/coverage) | **Design Gates** (`gates/gates.md`): lints over the graph + arithmetic (DET) and adversarial verifiers (ADV) |
 | red→green→refactor of code | red→green→refactor of the **design**: v1→v2→…, a gate fails → refine → simplify |

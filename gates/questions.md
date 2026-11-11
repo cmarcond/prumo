@@ -9,7 +9,8 @@
 > user changed it · `prompt` = already fixed in the prompt · `[assumed]` =
 > automatic mode). These decisions are NOT design decisions: they are what the
 > owner fixes, and what the Design Gates (`gates.md`) check the design against.
-> Output: `intent.json` (no solution) + a skeleton of `requirements.json`.
+> Output: a thin `intent.json` (no solution). The complete `requirements.json`
+> comes afterwards, from `/prumo.requirements`.
 
 ## Gate A — Problem and scope
 | # | Question | Answer (proposed→confirmed) | Origin |

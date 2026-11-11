@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "design.schema.json",
-  "title": "Stage 08 — final design (ground truth for diagram comparison)",
+  "title": "Design — components and edges",
   "type": "object",
   "required": ["video_id", "problem_hint", "source", "components", "edges", "confidence", "partial"],
   "additionalProperties": true,

@@ -23,9 +23,10 @@ draw the distinct variation, or collapse it with a justification. Gate `G-ENUMER
 
 ## Step 1 — v1 (first version)
 Applying the skills (`skills/index.yaml`), produce:
-- a complete `requirements.json` — **do the back-of-the-envelope calculation** (skill
-  `find-the-binding-constraint`): estimate the bottleneck candidates and name the one
-  that limits. Do not skip the calculation.
+- the version's `requirements.json` — carried over from the complete `requirements.json`
+  of `/prumo.requirements`, **with the back-of-the-envelope calculation done** (skill
+  `find-the-binding-constraint`): the bottleneck candidates estimated and the one that
+  limits named. Do not skip the calculation.
 - `design.json` (components + edges, per `templates/schemas/design.schema.json`)
   and `design.mmd` (Mermaid built from the nodes/edges).
 

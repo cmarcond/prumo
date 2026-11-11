@@ -11,7 +11,7 @@
 > The method is agnostic of domain and technology: the technology is a
 > disposable example; the principle is what stays. Distilled from a real
 > system-design corpus (see `docs/method-patterns.md`) and from the meta-method
-> in `CORE_IDEA.md`.
+> of catraca (see `docs/catraca-study.md`).
 
 ## Principles
 
@@ -52,7 +52,7 @@
     user's **Problem Gates**, recorded with their origin. Everything else the
     agent executes through the Design Gates until the next Problem Gate.
 
-## The layers (they mirror CORE_IDEA)
+## The layers (they mirror catraca's; see `docs/catraca-study.md`)
 
 | Layer | Artifact | Question |
 |---|---|---|
