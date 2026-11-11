@@ -1,22 +1,22 @@
-' Exemplo de figura de CONTAINERS (C4 nivel 2) — os grandes blocos e o fluxo do dado.
-' Mapeie components do design.json: service->Container, datastore->ContainerDb,
-' broker/cache/cdn->Container com tag. Mantenha ~7-10 blocos por figura (legibilidade);
-' se passar disso, quebre por subsistema e use zooms (component).
+' Example of a CONTAINERS figure (C4 level 2) — the big blocks and the flow of the data.
+' Map the components of design.json: service->Container, datastore->ContainerDb,
+' broker/cache/cdn->Container with a tag. Keep ~7-10 blocks per figure (legibility);
+' if it goes past that, split by subsystem and use zooms (component).
 @startuml
 !include <C4/C4_Container>
 LAYOUT_WITH_LEGEND()
-title Visao de containers — <Sistema>
+title Container view — <System>
 
-Person(user, "Usuario")
-System_Boundary(s, "<Sistema>") {
-  Container(api, "Servico de API", "stateless", "Plano de controle")
-  ContainerDb(meta, "Metadata Store", "DynamoDB", "Point-lookup por id")
-  ContainerDb(blob, "Object Store", "S3", "Blobs duraveis")
-  Container(edge, "CDN / Edge", "CDN", "Serve o conteudo quente")
+Person(user, "User")
+System_Boundary(s, "<System>") {
+  Container(api, "API Service", "stateless", "Control plane")
+  ContainerDb(meta, "Metadata Store", "DynamoDB", "Point lookup by id")
+  ContainerDb(blob, "Object Store", "S3", "Durable blobs")
+  Container(edge, "CDN / Edge", "CDN", "Serves the hot content")
 }
 
 Rel(user, api, "request", "HTTPS")
-Rel(api, meta, "le/escreve")
-Rel(user, edge, "baixa bytes", "HTTPS")
-Rel(edge, blob, "origin pull em miss")
+Rel(api, meta, "reads/writes")
+Rel(user, edge, "downloads bytes", "HTTPS")
+Rel(edge, blob, "origin pull on miss")
 @enduml

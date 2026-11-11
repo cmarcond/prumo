@@ -1,61 +1,60 @@
 # /prumo.init — Problem Gates → intent + requirements skeleton
 
-Roteiro de inicialização. Pré-condição: `.prumo/` instalado. Saídas (na **raiz do
-projeto**): `questions.md` preenchido, `intent.json`, `requirements.json` (esqueleto).
+Initialization script. Precondition: `.prumo/` installed. Outputs (in the **project
+root**): a filled-in `questions.md`, `intent.json`, `requirements.json` (skeleton).
 
-> **Convenção de caminhos — framework × resultados.** `.prumo/` guarda o
-> **framework/método** (MANIFESTO, `gates/`, `skills/`, `templates/`, `docs/`),
-> compartilhado entre projetos: só muda **deliberadamente**, quando se promove um
-> novo gate/skill (mudança do *método*, que volta para o repo do Prumo) — nunca como
-> subproduto de um problema. Os **resultados** deste problema vão na **raiz do
-> projeto**: `questions.md`, `intent.json`, `requirements.json`,
-> `requirements-critique.md`, `design/`, `evaluation/`, `ratchet.json`. As respostas
-> dos Problem Gates são anotadas em `./questions.md` (raiz), **não** no template
-> `.prumo/gates/questions.md` (que fica em branco). Citações a `gates/…`, `skills/…`,
-> `templates/…` para **ler** referem-se a `.prumo/…`.
+> **Path convention — framework vs. results.** `.prumo/` holds the
+> **framework/method** (MANIFESTO, `gates/`, `skills/`, `templates/`, `docs/`),
+> shared across projects: it changes only **deliberately**, when a new gate/skill
+> is promoted (a change to the *method*, which goes back to the Prumo repo) — never
+> as a by-product of a problem. The **results** of this problem go in the **project
+> root**: `questions.md`, `intent.json`, `requirements.json`,
+> `requirements-critique.md`, `design/`, `evaluation/`, `ratchet.json`. The answers
+> to the Problem Gates are written in `./questions.md` (root), **not** in the template
+> `.prumo/gates/questions.md` (which stays blank). References to `gates/…`, `skills/…`,
+> `templates/…` for **reading** mean `.prumo/…`.
 
-## Passo 0 — Modo e constituição
-- Modo guiado (default) ou automático (se o usuário pedir).
-- Releia `manifesto.md` (princípios já valem — não pergunte se "quer achar o
-  gargalo": isso é constituição) e `gates/gates.md` (os Design Gates que vão
-  reger o design).
+## Step 0 — Mode and constitution
+- Guided mode (default) or automatic mode (if the user asks for it).
+- Re-read `manifesto.md` (the principles already hold — do not ask whether the user
+  "wants to find the bottleneck": that is constitution) and `gates/gates.md` (the
+  Design Gates that will govern the design).
 
-## Passo 0.5 — Leitura do problema (para poder SUGERIR)
-Antes de perguntar qualquer coisa, faça uma leitura rápida de arquiteto sobre o
-problema (mesmo que o prompt seja genérico, ex.: "projete um social graph"):
-qual o padrão de uso provável, o que domina (leitura? escrita? fan-out?), que
-garantias o domínio realmente exige, ordem de grandeza plausível. Essa leitura é
-a base das **propostas** dos gates — o usuário não precisa chegar sabendo escala
-nem consistência.
+## Step 0.5 — Reading of the problem (so that you can SUGGEST)
+Before asking anything, do a quick architect's reading of the problem (even if the
+prompt is generic, e.g. "design a social graph"): what the likely usage pattern is,
+what dominates (reads? writes? fan-out?), which guarantees the domain really demands,
+a plausible order of magnitude. This reading is the basis for the gate **proposals** —
+the user does not need to arrive knowing scale or consistency.
 
-## Passo 1 — Problem Gates (A→E): sugerir, não interrogar
-O usuário pode ser **genérico**. Leia as perguntas do **template**
-`.prumo/gates/questions.md` (em branco — NÃO o edite) e grave as respostas em
-`./questions.md` na **raiz**. Para CADA gate, o agente **propõe** uma resposta
-derivada do Passo 0.5, com uma linha de justificativa, e pede só confirmação —
-nunca deixa a pergunta aberta para o usuário preencher do zero. Regras:
-- **Guiado**: um gate por vez. Apresente a proposta ("Sugiro read-heavy ~100:1
-  porque buscas/visualizações ≫ novas conexões; ok?"). O usuário confirma, ajusta
-  ou pede alternativas. Grave com origem `proposto` (confirmado) ou `usuário`
-  (se ele mudou) ou `prompt` (se ele já fixara no prompt).
-- **Automático**: grave a própria proposta como resposta, marcada
-  `[assumed AAAA-MM-DD]`, e siga.
-- O que o usuário fixou no prompt é proposta a confirmar (origem `prompt`), não
-  pergunta. O que ele NÃO fixou, você propõe — não pergunta em aberto.
+## Step 1 — Problem Gates (A→E): suggest, do not interrogate
+The user may be **generic**. Read the questions from the **template**
+`.prumo/gates/questions.md` (blank — do NOT edit it) and write the answers to
+`./questions.md` in the **root**. For EACH gate, the agent **proposes** an answer
+derived from Step 0.5, with one line of justification, and asks only for confirmation —
+it never leaves the question open for the user to fill in from scratch. Rules:
+- **Guided**: one gate at a time. Present the proposal ("I suggest read-heavy ~100:1
+  because searches/views ≫ new connections; ok?"). The user confirms, adjusts
+  or asks for alternatives. Record it with origin `proposed` (confirmed) or `user`
+  (if the user changed it) or `prompt` (if the user had already fixed it in the prompt).
+- **Automatic**: record the proposal itself as the answer, marked
+  `[assumed YYYY-MM-DD]`, and go on.
+- What the user fixed in the prompt is a proposal to confirm (origin `prompt`), not a
+  question. What the user did NOT fix, you propose — you do not ask it as an open question.
 
-## Passo 2 — `intent.json` (a semente, **fino**, sem solução)
-A partir do Gate A: `problem`, `goal`, `scope_in[]` / `scope_out[]` **de alto nível
-(o que o DONO decide incluir/excluir)**, `context_assumptions[]` (qualitativas).
-**Mantenha fino**: o intent NÃO traz a lista funcional detalhada, nem invariantes,
-nem números — isso é **derivação**, e nasce na fase `/prumo.requirements` (pôr aqui
-vaza o trabalho que será testado). Duas barreiras:
-- **intenção/solução**: o intent não cita componente/tecnologia/padrão;
-- **intenção/derivação**: o intent não enumera requisitos derivados (relacionamentos,
-  edge-cases, invariantes, métricas) — só o escopo que o dono fixa.
-Rode uma revisão adversarial (contexto limpo) que caça vazamento de solução **e** de
-derivação antes de aceitar. Schema: `templates/schemas/intent.schema.json`.
+## Step 2 — `intent.json` (the seed, **thin**, no solution)
+From Gate A: `problem`, `goal`, **high-level** `scope_in[]` / `scope_out[]` **(what the
+OWNER decides to include/exclude)**, `context_assumptions[]` (qualitative).
+**Keep it thin**: the intent does NOT carry the detailed functional list, nor invariants,
+nor numbers — that is **derivation**, and it is born in the `/prumo.requirements` phase
+(putting it here leaks the work that will be tested). Two barriers:
+- **intent/solution**: the intent does not name a component/technology/pattern;
+- **intent/derivation**: the intent does not enumerate derived requirements (relationships,
+  edge cases, invariants, metrics) — only the scope the owner fixes.
+Run an adversarial review (clean context) that hunts for leakage of solution **and** of
+derivation before accepting it. Schema: `templates/schemas/intent.schema.json`.
 
-## Passo 3 — Encerramento
-- Confirme consistência (problema × escopo do dono × respostas dos gates).
-- Próxima fase: **`/prumo.requirements`** (expande o intent fino em requisitos ricos,
-  com o gate de completude), e só então `/prumo.design`.
+## Step 3 — Wrap-up
+- Confirm consistency (problem × the owner's scope × the gate answers).
+- Next phase: **`/prumo.requirements`** (expands the thin intent into rich requirements,
+  with the completeness gate), and only then `/prumo.design`.

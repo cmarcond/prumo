@@ -1,107 +1,104 @@
-# Prumo — framework agêntico de System Design
+# Prumo — an agentic framework for system design
 
-> **English summary.** Prumo ("plumb line") is an agentic framework for system
-> design, the sibling of [catraca](https://github.com/cmarcond/catraca). Instead of
-> letting an agent produce a zero-shot design, it makes the agent design in
-> versions (v1 → v2 → …) while **design-reasoning gates** fail each version until
-> it passes, the same red → green → refactor loop applied to design. A ratchet
-> locks in the best result. It is a layer of Markdown/YAML files (gates, skills,
-> commands, schemas) installed into `.prumo/`; the host agent executes. The gates
-> and skills were distilled from a corpus of real system-design interviews.
-> Status: v0. On held-out problems, blind reproduction of the reference design
-> rose from about 0.63 (zero-shot) to about 0.75 (versioned with gates). The rest
-> of this README is in Portuguese.
+*Prumo* is Portuguese for **plumb line**: the weighted string that checks whether
+something is aligned against a true reference. Here the reference is what the
+system has to satisfy; the **gates** check whether the design is "plumb".
 
-O **prumo** é o fio que verifica se algo está alinhado contra uma referência
-verdadeira. Aqui a referência é o que o sistema precisa atender; os **gates**
-verificam se o design está "no prumo".
+Prumo is the sibling of [`catraca`](https://github.com/cmarcond/catraca) (spec-driven TDD):
+the same philosophy (text artifacts that guide an agent; the agent executes),
+applied to system design. It is a layer of Markdown/YAML files (gates, skills,
+commands, schemas) installed into `.prumo/`; the host agent executes. The gates
+and skills were distilled from a real corpus of system-design interviews; see
+`docs/method-patterns.md` and `docs/catraca-study.md`.
 
-Irmão do [`catraca`](https://github.com/cmarcond/catraca) (spec-driven TDD) — mesma filosofia (artefatos
-de texto que guiam um agente; o agente executa), aplicada a system design.
-Destilado de um corpus real de entrevistas de system design; ver
-`docs/method-patterns.md` e `docs/catraca-study.md`.
+## The idea in one sentence
+Instead of letting the agent spit out a zero-shot design (which tends toward the
+"neutral baseline"), the agent designs in **versions** (v1 → v2 → …), with
+**design-reasoning gates** failing each version until it is green: the same
+red → green → refactor loop as catraca, only applied to the design. A **ratchet**
+(*catraca*, in Portuguese) locks in the best result.
 
-## Ideia em uma frase
-Em vez de o agente cuspir um design zero-shot (que tende à "baseline neutra"),
-ele projeta por **versões** (v1 → v2 → …), com **gates de raciocínio de design**
-reprovando entre as versões até ficar verde — o mesmo red → green → refactor do
-catraca, só que sobre o design. Uma **catraca** (ratchet) trava o melhor resultado.
-
-## As peças
-| Peça | Arquivo | Papel |
+## The pieces
+| Piece | File | Role |
 |---|---|---|
-| Constituição | `MANIFESTO.md` | princípios que não se negociam |
-| Problem Gates | `gates/questions.md` | o que o **dono** decide (escopo, escala, garantias, custo) |
-| Design Gates | `gates/gates.md` | o que **reprova** um design (lints DET + verificadores ADV) |
-| Skills | `skills/` + `index.yaml` | o **como** projetar bem (cada skill conserta o gate que ela respalda) |
-| Comandos | `commands/` | `init` → `requirements` → `design` → `evaluate` → `publish` |
-| Memória | `templates/ratchet.json` | piso de qualidade que só sobe |
-| Schemas | `templates/schemas/` | formato de requirements / design / scores |
+| Constitution | `MANIFESTO.md` | principles that are not negotiable |
+| Problem Gates | `gates/questions.md` | what the **owner** decides (scope, scale, guarantees, cost) |
+| Design Gates | `gates/gates.md` | what **fails** a design (DET lints + ADV verifiers) |
+| Skills | `skills/` + `index.yaml` | **how** to design well (each skill repairs the gate it backs) |
+| Commands | `commands/` | `init` → `requirements` → `design` → `evaluate` → `publish` |
+| Memory | `templates/ratchet.json` | a quality floor that only goes up |
+| Schemas | `templates/schemas/` | the format of requirements / design / scores |
 
-## Layout no projeto — framework × resultados
-O instalador cria `.prumo/` no projeto alvo. Vale a separação:
+## Layout in the project — framework vs. results
+The installer creates `.prumo/` in the target project. The separation is:
 
-- **`.prumo/` = framework/método** (MANIFESTO, `gates/`, `skills/`, `templates/`,
-  `commands/`, `docs/`). Compartilhado entre projetos; só muda **deliberadamente**
-  ao promover um novo gate/skill — e essa mudança é do *método*, que volta para
-  este repo (`prumo`), não um subproduto de um problema.
-- **Raiz do projeto = resultados** do problema, gravados pelos comandos:
-  `questions.md` (Problem Gates respondidos), `intent.json`, `requirements.json`,
+- **`.prumo/` = framework/method** (MANIFESTO, `gates/`, `skills/`, `templates/`,
+  `commands/`, `docs/`). Shared across projects; it changes only **deliberately**,
+  when a new gate/skill is promoted. That change belongs to the *method* and goes
+  back to this repo (`prumo`); it is not a by-product of a problem.
+- **Project root = results** of the problem, written by the commands:
+  `questions.md` (the answered Problem Gates), `intent.json`, `requirements.json`,
   `requirements-critique.md`, `design/v1..vN/` + `design/v_final`, `evaluation/`,
   `ratchet.json`.
 
 ```
-projeto/
-├── questions.md            # respostas dos Problem Gates (resultado)
-├── intent.json             # resultado
-├── requirements.json       # resultado
+project/
+├── questions.md            # Problem Gate answers (result)
+├── intent.json             # result
+├── requirements.json       # result
 ├── requirements-critique.md
-├── design/ v1.. v_final/   # resultado
-├── evaluation/             # resultado
-├── ratchet.json            # resultado (piso de qualidade)
-└── .prumo/                 # FRAMEWORK (método): gates, skills, templates, …
+├── design/ v1.. v_final/   # result
+├── evaluation/             # result
+├── ratchet.json            # result (quality floor)
+└── .prumo/                 # FRAMEWORK (method): gates, skills, templates, …
 ```
 
-O template `.prumo/gates/questions.md` fica **em branco**; o `init` o lê e grava as
-respostas em `./questions.md`. Citações a `gates/…`, `skills/…`, `templates/…` nos
-comandos referem-se a `.prumo/…` para **leitura**.
+The template `.prumo/gates/questions.md` stays **blank**; `init` reads it and writes
+the answers to `./questions.md`. References to `gates/…`, `skills/…`, `templates/…`
+in the commands mean `.prumo/…`, for **reading**.
 
-## Fluxo
-1. `/prumo.init` — Problem Gates (o agente **sugere**, o dono confirma) → `intent.json`
-   **fino** (problema + escopo do dono + contexto qualitativo; sem lista derivada).
-2. `/prumo.requirements` — **expande** o intent fino em requisitos ricos (funcionais
-   implícitos, relacionamentos, invariantes, NFR derivados do workload, números), com
-   o gate de completude `G-REQ-COMPLETENESS`. Derivar bem é skill, não insumo.
-3. `/prumo.design` — loop versionado: v1 → gate critique (red) → refina (green) →
-   simplifica (refactor) → mutação (prova os gates).
-4. `/prumo.evaluate` — rubrica + auditoria de contexto limpo + ratchet. Em modo
-   benchmark, compara contra o ground truth do mestre (o meta-gate).
-5. `/prumo.publish` — documento pedagógico da solução: decompõe o `design/v_final`
-   em figuras C4 (contexto→container→component) + sequências + cenários, monta um
-   LaTeX e gera `doc/solution.pdf` num container Docker (LaTeX+PlantUML). Gates
-   `G-DOC-LEGIBLE` / `G-DOC-PEDAGOGIC`.
+## Flow
+1. `/prumo.init` — Problem Gates (the agent **suggests**, the owner confirms) → a
+   **thin** `intent.json` (problem + the owner's scope + qualitative context; no
+   derived list).
+2. `/prumo.requirements` — **expands** the thin intent into rich requirements
+   (implicit functional requirements, relationships, invariants, NFRs derived from
+   the workload, numbers), with the completeness gate `G-REQ-COMPLETENESS`.
+   Deriving well is a skill, not an input.
+3. `/prumo.design` — the versioned loop: v1 → gate critique (red) → refine (green) →
+   simplify (refactor) → mutation (proves the gates).
+4. `/prumo.evaluate` — rubric + clean-context audit + ratchet. In benchmark mode,
+   it compares against the instructor's ground truth (the meta-gate).
+5. `/prumo.publish` — a teaching document for the solution: it decomposes
+   `design/v_final` into C4 figures (context→container→component) + sequences +
+   scenarios, assembles a LaTeX document and generates `doc/solution.pdf` in a
+   Docker container (LaTeX+PlantUML). Gates `G-DOC-LEGIBLE` / `G-DOC-PEDAGOGIC`.
 
-> O benchmark alimenta o agente **só com o intent fino** (ou um prompt genérico) —
-> nunca com os requisitos prontos. Derivar os requisitos é parte do que se mede.
+> The benchmark feeds the agent **only the thin intent** (or a generic prompt),
+> never the finished requirements. Deriving the requirements is part of what is
+> measured.
 
-**Entrada auxiliar.** `/prumo.reverse` faz o caminho inverso: parte de um **projeto
-existente** (path) e reconstrói o *seed* (enunciado do problema + Problem Gates) que,
-dado ao `/prumo.init`, regeneraria aquele design. Valide por round-trip rodando o
-seed pelo fluxo e comparando o `design.json` com os componentes reais do projeto.
+**Auxiliary entry point.** `/prumo.reverse` goes the other way: it starts from an
+**existing project** (a path) and reconstructs the *seed* (problem statement +
+Problem Gates) that, given to `/prumo.init`, would regenerate that design. Validate
+it by round-trip: run the seed through the flow and compare the `design.json` with
+the project's real components.
 
-## Instalação
+## Installation
 ```
-python3 install.py /caminho/do/projeto-alvo
+python3 install.py /path/to/target-project
 ```
-Idempotente; cria `.prumo/` no alvo + atalhos `/prumo.*` em `.claude/commands/prumo/`.
+Idempotent; creates `.prumo/` in the target + `/prumo.*` shortcuts in
+`.claude/commands/prumo/`.
 
-## Estado
-v0 — destilado de um piloto de 10 vídeos. Reprodução cega de held-out (intent +
-skills + gates) sobe de ~0.63 (zero-shot) para ~0.75 (versionado com gates). Os
-gates DET ainda dependem de anotações no `design.json`; o loop-until-green hoje é
-roteiro de comando, não runner automatizado. Próximos: automatizar o loop,
-engrossar gates/skills com o corpus completo (82 vídeos), triangular a avaliação.
+## Status
+v0, distilled from a pilot of 10 videos. Blind reproduction of held-out problems
+(intent + skills + gates) rises from ~0.63 (zero-shot) to ~0.75 (versioned with
+gates). The DET gates still depend on annotations in `design.json`; the
+loop-until-green is currently a command script, not an automated runner. Next:
+automate the loop, thicken the gates/skills with the full corpus (82 videos),
+triangulate the evaluation.
 
-## Licença
+## License
 
-MIT. Veja [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

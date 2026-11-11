@@ -1,5 +1,5 @@
-# Toolchain do /prumo.publish: PlantUML (C4) -> SVG -> PDF (vetor) + LaTeX -> PDF.
-# Base enxuta (não o texlive-full): só o necessário para o template solution.tex.
+# Toolchain for /prumo.publish: PlantUML (C4) -> SVG -> PDF (vector) + LaTeX -> PDF.
+# Lean base (not texlive-full): only what the solution.tex template needs.
 FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       wget ca-certificates fontconfig \
  && rm -rf /var/lib/apt/lists/*
 
-# plantuml.jar pinado e recente (traz a stdlib C4 via "!include <C4/...>",
-# sem depender de internet no render).
+# plantuml.jar pinned and recent (it ships the C4 stdlib via "!include <C4/...>",
+# with no dependency on the internet at render time).
 ARG PLANTUML_VERSION=1.2024.7
 RUN wget -qO /opt/plantuml.jar \
       "https://github.com/plantuml/plantuml/releases/download/v${PLANTUML_VERSION}/plantuml-${PLANTUML_VERSION}.jar"

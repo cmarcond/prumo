@@ -1,66 +1,66 @@
 # Decompose The Diagram For Teaching
 
-Um único diagrama com todos os componentes é ilegível e não ensina. Quebre o
-design em uma **sequência de figuras** que vai do alto nível ao detalhe, mais
-fluxos (sequência) e cenários — cada figura legível por si, cada uma com texto
-que a lê para o leitor.
+A single diagram with every component is illegible and does not teach. Break the
+design into a **sequence of figures** that goes from the high level to the detail, plus
+flows (sequences) and scenarios — each figure legible on its own, each with text
+that reads it for the reader.
 
 ## When To Use
-- Fase `/prumo.publish`: transformar o `design/v_final` num documento pedagógico.
-- Sempre que um `design.json` tem mais de ~8–10 componentes (um diagrama só vira
-  emaranhado).
+- The `/prumo.publish` phase: turning `design/v_final` into a teaching document.
+- Whenever a `design.json` has more than ~8–10 components (a single diagram becomes a
+  tangle).
 
 ## When Not To Use
-- Design trivial (≤ ~6 nós, 1 fluxo): uma figura de contexto + uma de containers
-  já bastam; não invente zooms vazios.
+- A trivial design (≤ ~6 nodes, 1 flow): one context figure + one containers figure
+  are enough; do not invent empty zooms.
 
 ## Preconditions
-- `design/v_final/design.json` (componentes + arestas anotadas) e
-  `requirements.json` (números, invariantes), `critique.md` (decisões/alternativas).
-- Os eixos de variação do problema (do `/prumo.design`, skill `enumerate-variations`)
-  — eles definem quais zooms e cenários valem a pena.
+- `design/v_final/design.json` (annotated components + edges) and
+  `requirements.json` (numbers, invariants), `critique.md` (decisions/alternatives).
+- The problem's axes of variation (from `/prumo.design`, skill `enumerate-variations`)
+  — they define which zooms and scenarios are worth having.
 
 ## Order Of Operations
-1. **Mapeie o design nos níveis C4.** Contexto (atores + o sistema como caixa
-   preta) → Containers (os grandes blocos: services, stores, broker, cdn) →
-   Components (zoom dentro de um subsistema). `type` do componente vira o macro
-   C4: `service→Container`, `datastore→ContainerDb`, `broker→ContainerQueue`,
-   `cache/cdn→Container` com rótulo.
-2. **Corte por eixo de variação, não arbitrariamente.** Cada zoom (component) é um
-   subsistema coeso — tipicamente os mesmos eixos que o design separou
-   (ingestão×serventia, escrita×leitura, quente×frio). Um zoom por eixo relevante.
-3. **Teto de legibilidade: ~10 caixas por figura.** Se um nível passa disso,
-   promova um subconjunto a um zoom próprio. A figura de containers mostra o
-   esqueleto; os detalhes moram nos zooms.
-4. **Fluxos viram diagramas de sequência.** Um por caminho principal (ex.: upload,
-   watch). A sequência é onde se vê a **ordem** e a **assincronia** (ack antes do
-   fan-out; persist antes de visível) — coisas que o diagrama de blocos esconde.
-5. **Cenários viram figuras próprias.** Falha parcial, pico/viral (cold-start),
-   concorrência (deleção durante leitura): um recorte por cenário, mostrando só os
-   componentes que ele exercita.
-6. **Cada figura ganha prosa.** Abaixo de cada figura, leia-a para o leitor: o que
-   olhar, por que aquele bloco existe, qual pressão ele alivia. Figura sem texto
-   não ensina.
+1. **Map the design onto the C4 levels.** Context (actors + the system as a black
+   box) → Containers (the big blocks: services, stores, broker, cdn) →
+   Components (a zoom inside a subsystem). The component's `type` becomes the C4
+   macro: `service→Container`, `datastore→ContainerDb`, `broker→ContainerQueue`,
+   `cache/cdn→Container` with a label.
+2. **Cut along an axis of variation, not arbitrarily.** Each zoom (component) is a
+   cohesive subsystem — typically the same axes the design separated
+   (ingestion×serving, write×read, hot×cold). One zoom per relevant axis.
+3. **Legibility ceiling: ~10 boxes per figure.** If a level goes past that,
+   promote a subset to a zoom of its own. The containers figure shows the
+   skeleton; the details live in the zooms.
+4. **Flows become sequence diagrams.** One per main path (e.g. upload,
+   watch). The sequence is where you see the **order** and the **asynchrony** (ack before
+   the fan-out; persist before visible) — things the block diagram hides.
+5. **Scenarios become figures of their own.** Partial failure, peak/viral (cold-start),
+   concurrency (deletion during a read): one cut per scenario, showing only the
+   components it exercises.
+6. **Each figure gets prose.** Below each figure, read it for the reader: what to
+   look at, why that block exists, which pressure it relieves. A figure without text
+   does not teach.
 
 ## Test Checklist
-- [ ] Existe uma figura de contexto (alto nível) antes de qualquer detalhe.
-- [ ] Nenhuma figura passa de ~10 caixas; as densas viraram zooms.
-- [ ] Cada eixo de variação do problema tem seu zoom (ou foi colapsado com motivo).
-- [ ] Cada caminho principal tem um diagrama de sequência mostrando ordem/assincronia.
-- [ ] Cada cenário de falha/pico/concorrência tem sua figura.
-- [ ] Toda figura é seguida de prosa que a explica (não fica órfã).
+- [ ] There is a context figure (high level) before any detail.
+- [ ] No figure has more than ~10 boxes; the dense ones became zooms.
+- [ ] Each axis of variation of the problem has its zoom (or was collapsed with a reason).
+- [ ] Each main path has a sequence diagram showing order/asynchrony.
+- [ ] Each failure/peak/concurrency scenario has its figure.
+- [ ] Every figure is followed by prose that explains it (it is not left an orphan).
 
 ## Anti-Patterns
-- **Diagrama-emaranhado**: um único quadro com tudo, ilegível, "tecnicamente completo".
-- **Zoom vazio**: quebrar por quebrar, gerando figuras que não acrescentam.
-- **Figura órfã**: imagem sem texto que a leia — bonita e muda.
-- **Sequência ausente**: só blocos, nunca a ordem temporal — esconde a assincronia
-  e a ordenação, que são metade do design.
-- **Estourar a página**: figura grande demais para o papel; resolve-se decompondo,
-  não encolhendo a fonte até ilegível.
+- **Tangle diagram**: a single board with everything, illegible, "technically complete".
+- **Empty zoom**: splitting for the sake of splitting, producing figures that add nothing.
+- **Orphan figure**: an image with no text that reads it — pretty and mute.
+- **Missing sequence**: only blocks, never the temporal order — it hides the asynchrony
+  and the ordering, which are half of the design.
+- **Overflowing the page**: a figure too big for the paper; the fix is to decompose it,
+  not to shrink the font until it is illegible.
 
 ## Provenance
-Feature `/prumo.publish`: o `design.json` é a fonte de verdade, mas um humano
-aprende a solução por uma progressão de vistas (C4: contexto→container→component)
-+ fluxos + cenários, cada vista legível e narrada. Espelha o princípio "o artefato
-é a verdade; a narração é contexto" aplicado à comunicação da solução.
+The `/prumo.publish` feature: `design.json` is the source of truth, but a human
+learns the solution through a progression of views (C4: context→container→component)
++ flows + scenarios, each view legible and narrated. It mirrors the principle "the
+artifact is the truth; the narration is context" applied to communicating the solution.

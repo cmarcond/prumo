@@ -1,51 +1,52 @@
-# Problem Gates — perguntas iniciais (decisões do dono)
+# Problem Gates — initial questions (the owner's decisions)
 
-> Registro vivo das decisões do **problema**. O usuário pode ser **genérico**: o
-> agente **sugere** cada resposta a partir de uma leitura do problema (init,
-> Passo 0.5) e o usuário só confirma/ajusta. Gate é proposta-para-confirmar, não
-> pergunta aberta — ninguém precisa chegar sabendo escala ou consistência.
-> Coluna "Resposta" recebe a resposta final; "Origem" registra de onde veio
-> (`proposto` = sugestão confirmada · `usuário` = ele mudou · `prompt` = já
-> fixara no prompt · `[assumed]` = modo automático). Estas decisões NÃO são de
-> design — são o que o dono fixa, e contra o que os Design Gates (`gates.md`)
-> verificam o design. Saída: `intent.json` (sem solução) + esqueleto de
-> `requirements.json`.
+> A living record of the decisions about the **problem**. The user may be
+> **generic**: the agent **suggests** each answer from a reading of the problem
+> (init, Step 0.5) and the user only confirms/adjusts. A gate is a
+> proposal-to-confirm, not an open question: nobody needs to arrive knowing
+> scale or consistency. The "Answer" column receives the final answer; "Origin"
+> records where it came from (`proposed` = suggestion confirmed · `user` = the
+> user changed it · `prompt` = already fixed in the prompt · `[assumed]` =
+> automatic mode). These decisions are NOT design decisions: they are what the
+> owner fixes, and what the Design Gates (`gates.md`) check the design against.
+> Output: `intent.json` (no solution) + a skeleton of `requirements.json`.
 
-## Gate A — Problema e escopo
-| # | Pergunta | Resposta (proposta→confirmada) | Origem |
+## Gate A — Problem and scope
+| # | Question | Answer (proposed→confirmed) | Origin |
 |---|---|---|---|
-| P1 | Que sistema vamos projetar, em termos de problema (não de solução)? Quem usa e o que consegue fazer? | | |
-| P2 | O que está **dentro** do escopo (capacidades) e o que está **fora** (variantes que NÃO trataremos)? | | |
+| P1 | What system are we designing, in terms of the problem (not the solution)? Who uses it and what can they do? | | |
+| P2 | What is **in** scope (capabilities) and what is **out** (variants we will NOT handle)? | | |
 
-## Gate B — Escala e forma do workload
-| # | Pergunta | Resposta (proposta→confirmada) | Origem |
+## Gate B — Scale and shape of the workload
+| # | Question | Answer (proposed→confirmed) | Origin |
 |---|---|---|---|
-| P3 | Ordem de grandeza: usuários/itens, e a razão **leitura:escrita**? (read-heavy? write-heavy? balanceado?) | | |
-| P4 | Há fan-out / amplificação de escrita (um evento gera N escritas)? Picos/sazonalidade? | | |
+| P3 | Order of magnitude: users/items, and the **read:write** ratio? (read-heavy? write-heavy? balanced?) | | |
+| P4 | Is there fan-out / write amplification (one event generates N writes)? Peaks/seasonality? | | |
 
-## Gate C — Garantias (o que o problema exige e o que tolera)
-| # | Pergunta | Resposta (proposta→confirmada) | Origem |
+## Gate C — Guarantees (what the problem demands and what it tolerates)
+| # | Question | Answer (proposed→confirmed) | Origin |
 |---|---|---|---|
-| P5 | Prioridade **consistência × disponibilidade** no caminho crítico? Há requisito de unicidade / exactly-once? | | |
-| P6 | Quanta **staleness** é tolerada nas leituras? Contagem aproximada é aceitável onde? | | |
-| P7 | Alvos de **latência** (SLA, P99) e de **durabilidade** (pode perder dado? qual)? | | |
+| P5 | **Consistency × availability** priority on the critical path? Is there a uniqueness / exactly-once requirement? | | |
+| P6 | How much **staleness** is tolerated on reads? Where is an approximate count acceptable? | | |
+| P7 | **Latency** targets (SLA, P99) and **durability** targets (can data be lost? which data)? | | |
 
-## Gate D — Restrições e custo
-| # | Pergunta | Resposta (proposta→confirmada) | Origem |
+## Gate D — Constraints and cost
+| # | Question | Answer (proposed→confirmed) | Origin |
 |---|---|---|---|
-| P8 | Restrições de custo/infra, multi-região, compliance, ou tecnologias mandatórias/proibidas? | | |
+| P8 | Cost/infra constraints, multi-region, compliance, or mandatory/forbidden technologies? | | |
 
-## Gate E — Rigor e ratchet
-| # | Pergunta | Resposta (proposta→confirmada) | Origem |
+## Gate E — Rigor and ratchet
+| # | Question | Answer (proposed→confirmed) | Origin |
 |---|---|---|---|
-| P9 | Avaliação rígida, pedagógica ou pragmática? | | |
-| P10 | Em regressão de score, o ratchet alerta (`warn`), bloqueia (`block`) ou repara (`repair`)? | | |
+| P9 | Strict, pedagogical or pragmatic evaluation? | | |
+| P10 | On a score regression, does the ratchet alert (`warn`), block (`block`) or repair (`repair`)? | | |
 
-## Defaults do perfil canônico (modo automático)
-Escopo mínimo explícito · razão read:write declarada (se desconhecida, assumir
-read-heavy e marcar) · disponibilidade > consistência salvo requisito de
-unicidade · staleness tolerada quando não dito o contrário · P99 como alvo ·
-sem multi-região salvo pedido · avaliação pedagógica · ratchet em `repair`.
+## Defaults of the canonical profile (automatic mode)
+Explicit minimal scope · read:write ratio declared (if unknown, assume
+read-heavy and mark it) · availability > consistency unless there is a
+uniqueness requirement · staleness tolerated when nothing says otherwise · P99
+as the target · no multi-region unless requested · pedagogical evaluation ·
+ratchet in `repair`.
 
-> Regra de ferro: **método nunca é pergunta; problema nunca é default sem marca.**
-> O que o usuário fixa explicitamente vira origem "prompt", não `[assumed]`.
+> Iron rule: **method is never a question; problem is never an unmarked default.**
+> What the user fixes explicitly gets the origin "prompt", not `[assumed]`.

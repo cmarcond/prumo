@@ -1,36 +1,36 @@
 # Enumerate Variations
 
-Muitos problemas têm **regimes distintos** que pedem arquiteturas distintas (ex.:
-deadline fixo vs deslizante; consistência forte vs eventual; regime read-heavy vs
-write-heavy). O mestre quase sempre **enumera as variações** e desenha as relevantes,
-em vez de cravar uma só. Esta skill traz esse reflexo; fecha a lacuna nº2 dos 15 runs
-("fez um design, não enumerou as variações").
+Many problems have **distinct regimes** that call for distinct architectures (e.g.
+fixed vs sliding deadline; strong vs eventual consistency; read-heavy vs
+write-heavy regime). The instructor almost always **enumerates the variations** and draws
+the relevant ones, instead of committing to a single one. This skill brings that reflex;
+it closes gap no. 2 of the 15 runs ("made one design, did not enumerate the variations").
 
 ## When To Use
-- No início do design, para nomear os eixos de variação do problema.
-- Sempre que o problema tem 2+ regimes que mudam a arquitetura.
+- At the start of the design, to name the problem's axes of variation.
+- Whenever the problem has 2+ regimes that change the architecture.
 
 ## When Not To Use
-- Problema genuinamente de regime único (registre que checou e não há variação).
+- A genuinely single-regime problem (record that you checked and there is no variation).
 
 ## Preconditions
-- Intent + requirements (os eixos saem dos requisitos: consistência, deadline, escala, padrão de acesso).
+- Intent + requirements (the axes come out of the requirements: consistency, deadline, scale, access pattern).
 
 ## Order Of Operations
-1. Nomeie os **eixos de variação** do problema (consistência forte×eventual, fixo×dinâmico, exato×aproximado, contínuo×intermitente).
-2. Para cada eixo relevante, **desenhe a variação distinta** (ou justifique colapsar numa só por que as outras não mudam a arquitetura).
-3. Registre a progressão naive→escolhido com a **falha nomeada** da alternativa rejeitada (complementa G-NAIVE-FIRST).
-4. Deixe explícito qual variação é o caminho principal e por quê.
+1. Name the problem's **axes of variation** (strong×eventual consistency, fixed×dynamic, exact×approximate, continuous×intermittent).
+2. For each relevant axis, **draw the distinct variation** (or justify collapsing into a single one because the others do not change the architecture).
+3. Record the naive→chosen progression with the **named failure** of the rejected alternative (complements G-NAIVE-FIRST).
+4. Make explicit which variation is the main path and why.
 
 ## Test Checklist
-- [ ] Os eixos de variação do problema estão nomeados.
-- [ ] Cada eixo com impacto arquitetural tem sua variação desenhada ou um motivo registrado para colapsar.
-- [ ] Há ≥1 alternativa rejeitada com a falha nomeada.
+- [ ] The problem's axes of variation are named.
+- [ ] Each axis with architectural impact has its variation drawn or a recorded reason for collapsing it.
+- [ ] There is ≥1 rejected alternative with its failure named.
 
 ## Anti-Patterns
-- Cravar uma arquitetura sem expor os eixos de variação.
-- Apresentar um único design onde o problema claramente tem 2+ regimes (ex.: tempo-real só quando há watchers contínuos).
+- Committing to one architecture without exposing the axes of variation.
+- Presenting a single design where the problem clearly has 2+ regimes (e.g. real-time only when there are continuous watchers).
 
 ## Provenance
-Derivada dos 15 runs: partials/misses concentravam-se em "construiu um design, o mestre
-explorou variações". Backs gate **G-ENUMERATE-VARIATIONS** (complementa G-NAIVE-FIRST).
+Derived from the 15 runs: partials/misses were concentrated in "built one design, the
+instructor explored variations". Backs gate **G-ENUMERATE-VARIATIONS** (complements G-NAIVE-FIRST).

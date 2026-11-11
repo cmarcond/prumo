@@ -1,58 +1,60 @@
 # Elicit Requirements From a Thin Intent
 
-Derivar uma lista rica de requisitos a partir de um enunciado genérico. O intent
-diz o problema e o escopo do dono; os requisitos — funcionais (inclusive os
-implícitos), invariantes, não-funcionais e números — são **derivados**, e derivar
-é o trabalho. Não copie as palavras do enunciado como se fossem os requisitos.
+Derive a rich list of requirements from a generic problem statement. The intent
+states the problem and the owner's scope; the requirements — functional (including the
+implicit ones), invariants, non-functional and numbers — are **derived**, and deriving
+is the work. Do not copy the words of the problem statement as if they were the requirements.
 
 ## When To Use
-- Logo após o intent estar fixado e antes de qualquer design.
-- Sempre que o enunciado for genérico ("projete um X estilo Y") e a superfície de
-  requisitos ainda não existir.
+- Right after the intent is fixed and before any design.
+- Whenever the problem statement is generic ("design an X in the style of Y") and the
+  requirements surface does not exist yet.
 
 ## When Not To Use
-- Quando os requisitos já vêm dados e verificados pelo dono (raro; ainda assim
-  rode o checklist de completude).
-- Para um spike descartável que não vira design mantido.
+- When the requirements already come given and verified by the owner (rare; even so,
+  run the completeness checklist).
+- For a throwaway spike that will not become a maintained design.
 
 ## Preconditions
-- Um `intent.json` fino (problema + escopo in/out do dono + contexto qualitativo).
-- A forma do workload pelo menos proposta (read:write, fan-out, volume).
+- A thin `intent.json` (problem + the owner's in/out scope + qualitative context).
+- The shape of the workload at least proposed (read:write, fan-out, volume).
 
 ## Order Of Operations
-1. **Modele o domínio**: liste entidades, ações sobre elas, e os
-   **relacionamentos** entre entidades. Relacionamento é onde moram os requisitos
-   esquecidos (ex.: dois tipos de relação que parecem um só; relação direcional).
-2. **Caminhe os edge-cases**: criação/atualização/deleção, conflito/duplicata,
-   ausência, limites (o maior/menor caso), concorrência. Cada um costuma revelar
-   um funcional ou um invariante.
-3. **Extraia invariantes**: o que NUNCA pode ser violado? unicidade, monotonicidade
-   (upgrade-only), ordenação, exactly-once, conservação. Invariante vira NFR e
-   gate depois.
-4. **Derive NFR da forma do workload**: read-heavy → latência/leitura e
-   consistência tolerável; write/fan-out → amplificação e durabilidade; volume →
-   retenção. Cada NFR amarrado ao porquê (workload), não a um catálogo genérico.
-5. **Back-of-the-envelope**: número que o dono fixou + estimativa com a conta
+1. **Model the domain**: list the entities, the actions on them, and the
+   **relationships** between entities. Relationships are where the forgotten
+   requirements live (e.g. two types of relationship that look like one; a directional
+   relationship).
+2. **Walk the edge cases**: creation/update/deletion, conflict/duplicate,
+   absence, limits (the largest/smallest case), concurrency. Each one tends to reveal
+   a functional requirement or an invariant.
+3. **Extract invariants**: what can NEVER be violated? uniqueness, monotonicity
+   (upgrade-only), ordering, exactly-once, conservation. An invariant becomes an NFR and
+   a gate later.
+4. **Derive NFRs from the shape of the workload**: read-heavy → latency/reads and
+   tolerable consistency; write/fan-out → amplification and durability; volume →
+   retention. Each NFR tied to its why (the workload), not to a generic catalogue.
+5. **Back-of-the-envelope**: the number the owner fixed + an estimate with the calculation
    (use `find-the-binding-constraint`).
-6. **Revise por completude**: passe o `G-REQ-COMPLETENESS` e feche os buracos.
+6. **Review for completeness**: run `G-REQ-COMPLETENESS` and close the holes.
 
 ## Test Checklist
-- [ ] Todo relacionamento entre entidades virou ≥1 requisito ou foi descartado com motivo.
-- [ ] Os edge-cases (criar/atualizar/deletar/conflito/limite) estão cobertos.
-- [ ] Os invariantes do domínio estão explícitos.
-- [ ] Cada NFR cita a característica de workload que o motiva.
-- [ ] Os números têm conta, não chute; o gargalo provável está nomeado.
-- [ ] Nada é cópia literal do enunciado sem expansão.
+- [ ] Every relationship between entities became ≥1 requirement or was discarded with a reason.
+- [ ] The edge cases (create/update/delete/conflict/limit) are covered.
+- [ ] The domain invariants are explicit.
+- [ ] Each NFR cites the workload characteristic that motivates it.
+- [ ] The numbers have a calculation, not a guess; the likely bottleneck is named.
+- [ ] Nothing is a literal copy of the problem statement without expansion.
 
 ## Anti-Patterns
-- **Eco do enunciado**: repetir as palavras do prompt como "requisitos", sem derivar.
-- **Relacionamento esquecido**: tratar dois tipos de relação como um (ex.: seguir ≠ conectar).
-- **NFR de catálogo**: listar "alta disponibilidade, baixa latência" sem amarrar ao workload.
-- **Invariante implícito**: assumir unicidade/monotonicidade sem declará-la (some no design).
-- **Over-spec**: inventar requisito que o domínio não pede só para parecer completo.
+- **Echo of the problem statement**: repeating the words of the prompt as "requirements", without deriving.
+- **Forgotten relationship**: treating two types of relationship as one (e.g. follow ≠ connect).
+- **Catalogue NFR**: listing "high availability, low latency" without tying it to the workload.
+- **Implicit invariant**: assuming uniqueness/monotonicity without declaring it (it disappears in the design).
+- **Over-spec**: inventing a requirement the domain does not ask for just to look complete.
 
 ## Provenance
-Derivada empiricamente: o benchmark clean-room mostrou que, a partir de prompt
-genérico, a derivação de requisitos era o elo fraco (relacionamentos e invariantes
-implícitos eram perdidos). Corroborada pelo `requirements_method` observado no
-build-set (o mestre deriva números com conta e distingue variantes do problema).
+Derived empirically: the clean-room benchmark showed that, starting from a generic
+prompt, the derivation of requirements was the weak link (implicit relationships and
+invariants were lost). Corroborated by the `requirements_method` observed in the
+build-set (the instructor derives numbers with the calculation and distinguishes variants
+of the problem).

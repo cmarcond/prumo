@@ -5,84 +5,84 @@ skills:
   - id: elicit-requirements-from-intent
     path: skills/elicit-requirements-from-intent/SKILL.md
     backs_gates: [G-REQ-COMPLETENESS]
-    description: "Derive requisitos ricos (funcionais implícitos, relacionamentos, invariantes, NFR do workload, números) de um intent fino — sem ecoar o enunciado."
+    description: "Derive rich requirements (implicit functional requirements, relationships, invariants, NFRs from the workload, numbers) from a thin intent — without echoing the problem statement."
   - id: find-the-binding-constraint
     path: skills/find-the-binding-constraint/SKILL.md
     backs_gates: [G-AMPLIFICATION, G-CAPACITY]
-    description: "Estime os candidatos a gargalo (bandwidth/CPU/storage/throughput/fan-out) e projete para o que limita."
+    description: "Estimate the bottleneck candidates (bandwidth/CPU/storage/throughput/fan-out) and design for the one that limits."
   - id: choose-datastore-by-access-pattern
     path: skills/choose-datastore-by-access-pattern/SKILL.md
     backs_gates: [G-INLINE, G-FREETEXT]
-    description: "Escolha DB/índice pela razão read:write e forma da query; a tecnologia mais simples que serve."
+    description: "Choose the DB/index by the read:write ratio and the shape of the query; the simplest technology that fits."
   - id: partition-keys-and-hot-partitions
     path: skills/partition-keys-and-hot-partitions/SKILL.md
     backs_gates: [G-HOTPART]
-    description: "Partition key sem skew; hotspot read-heavy → replicas, não resharding; deixe infra gerenciada se auto-shardar."
+    description: "Partition key without skew; read-heavy hotspot → replicas, not resharding; let managed infra shard itself."
   - id: design-for-partial-failure
     path: skills/design-for-partial-failure/SKILL.md
     backs_gates: [G-IDEMPOTENT, G-UNIQUENESS, G-ORDERING]
-    description: "Enumere falhas parciais primeiro; persista a chave antes da chamada; ordem com falha menos-pior."
+    description: "Enumerate partial failures first; persist the key before the call; order with the least-bad failure."
   - id: exploit-tolerated-weakness
     path: skills/exploit-tolerated-weakness/SKILL.md
     backs_gates: [G-LEVER]
-    description: "Use o que o problema tolera (staleness/aproximação) como alavanca; não pague garantia desnecessária."
+    description: "Use what the problem tolerates (staleness/approximation) as a lever; do not pay for an unnecessary guarantee."
   - id: decouple-with-async-propagation
     path: skills/decouple-with-async-propagation/SKILL.md
     backs_gates: [G-ASYNC]
-    description: "Persista+ack imediato, propague async; push-vs-pull explícito; task runner como adaptador pull→push."
+    description: "Persist+ack immediately, propagate async; explicit push-vs-pull; a task runner as the pull→push adapter."
   - id: keep-large-payloads-out-of-path
     path: skills/keep-large-payloads-out-of-path/SKILL.md
     backs_gates: [G-PAYLOAD]
-    description: "Blobs no object store via URL; nunca pelos app servers; mapping no DB."
+    description: "Blobs in the object store via URL; never through the app servers; the mapping in the DB."
   - id: scope-defer-and-blackbox
     path: skills/scope-defer-and-blackbox/SKILL.md
     backs_gates: [G-SCOPE]
-    description: "Sub-problema auto-contido → black box nomeada; construa o núcleo do zero antes de colapsar em managed."
+    description: "Self-contained sub-problem → a named black box; build the core from scratch before collapsing into managed."
   - id: iterate-naive-to-optimal
     path: skills/iterate-naive-to-optimal/SKILL.md
     backs_gates: [G-NO-REINVENT, G-NAIVE-FIRST]
-    description: "Naive → expõe a falha → refina; nomeie a alternativa rejeitada; selecione por um critério decisivo."
+    description: "Naive → expose the failure → refine; name the rejected alternative; select by one decisive criterion."
   - id: ml-system-design
     path: skills/ml-system-design/SKILL.md
     backs_gates: [G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-TRAIN-SERVE-PARITY]
-    description: "Método de system design com ML: abordagem a partir do requisito, two-stage retrieval, persistir o modelo, train/serve parity, métrica por custo de erro."
+    description: "System design method with ML: approach derived from the requirement, two-stage retrieval, persist the model, train/serve parity, metric by cost of error."
   - id: separate-operational-from-analytical
     path: skills/separate-operational-from-analytical/SKILL.md
     backs_gates: [G-OLTP-OLAP]
-    description: "Tira leitura analítica/treino do store operacional; analítico via CDC para warehouse/lake."
+    description: "Take analytical reads/training off the operational store; analytics via CDC to a warehouse/lake."
   - id: persist-before-external-visibility
     path: skills/persist-before-external-visibility/SKILL.md
     backs_gates: [G-PERSIST-BEFORE-VISIBLE]
-    description: "Persistir de forma durável antes de tornar visível a terceiros (broadcast/ack); outbox transacional se decoupar."
+    description: "Persist durably before making it visible to third parties (broadcast/ack); a transactional outbox if you decouple."
   - id: model-invariants-in-data
     path: skills/model-invariants-in-data/SKILL.md
     backs_gates: [G-INVARIANT-IN-DATA, G-DELTA-NOT-STATE]
-    description: "Invariantes no modelo de dados (dinheiro exato, contagens guardadas, timestamp vs boolean); propagar deltas, não estado."
+    description: "Invariants in the data model (exact money, guarded counts, timestamp vs boolean); propagate deltas, not state."
   - id: classify-workload-first
     path: skills/classify-workload-first/SKILL.md
     backs_gates: [G-NO-OVERENGINEER-REALTIME]
-    description: "Classifique o workload (read/write/total-ordering, contínuo/intermitente) antes de desenhar; o fork escolhe a arquitetura."
+    description: "Classify the workload (read/write/total-ordering, continuous/intermittent) before drawing; the fork chooses the architecture."
   - id: enforce-on-the-server
     path: skills/enforce-on-the-server/SKILL.md
     backs_gates: [G-NO-CLIENT-TRUST]
-    description: "Segurança/correção é server-side; cliente é replayável/spoofável (rate-limit, authz, filtragem, ids sensíveis)."
+    description: "Security/correctness is server-side; the client is replayable/spoofable (rate limiting, authz, filtering, sensitive ids)."
   - id: append-only-event-sourcing
     path: skills/append-only-event-sourcing/SKILL.md
     backs_gates: [G-APPEND-ONLY]
-    description: "Append-only/event-sourcing onde há auditoria/reconstrução ou store LSM; evita tombstones e update/delete in-place."
+    description: "Append-only/event sourcing where there is auditing/reconstruction or an LSM store; avoids tombstones and in-place update/delete."
   - id: diagram-from-dataflow
     path: skills/diagram-from-dataflow/SKILL.md
     backs_gates: []
-    description: "Comece o diagrama pelos pontos de entrada/saída e construa para dentro; setas = direção do dado (read/write)."
+    description: "Start the diagram from the entry/exit points and build inward; arrows = direction of the data (read/write)."
   - id: materialize-tech-choices
     path: skills/materialize-tech-choices/SKILL.md
     backs_gates: [G-MATERIALIZE-TECH]
-    description: "Após a estrutura verde, nomeie a tech concreta de cada componente justificada pelo padrão de acesso (princípio→materialização)."
+    description: "Once the structure is green, name the concrete tech of each component, justified by the access pattern (principle→materialization)."
   - id: enumerate-variations
     path: skills/enumerate-variations/SKILL.md
     backs_gates: [G-ENUMERATE-VARIATIONS]
-    description: "Nomeie os eixos de variação do problema e desenhe as variações distintas (ou justifique colapsar)."
+    description: "Name the problem's axes of variation and draw the distinct variations (or justify collapsing them)."
   - id: decompose-diagram-for-teaching
     path: skills/decompose-diagram-for-teaching/SKILL.md
     backs_gates: [G-DOC-LEGIBLE, G-DOC-PEDAGOGIC]
-    description: "Quebre o design em vistas C4 (contexto→container→component) + sequências + cenários, cada figura legível e narrada (fase publish)."
+    description: "Break the design into C4 views (context→container→component) + sequences + scenarios, each figure legible and narrated (publish phase)."

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Instalador do Prumo — framework agêntico de System Design.
+"""Prumo installer — an agentic framework for system design.
 
-Copia constituição, gates, skills, comandos e templates para `.prumo/` num
-projeto alvo. Idempotente: nunca destrói conteúdo existente.
+Copies the constitution, gates, skills, commands and templates into `.prumo/`
+in a target project. Idempotent: it never destroys existing content.
 
-Regras por arquivo de destino:
-- não existe        -> cria
-- existe, idêntico  -> pula
-- existe, diferente -> preserva o existente e grava a nova versão como `<nome>.new`
-                       (com --force: move o existente para `<nome>.bak`)
+Rules per destination file:
+- does not exist     -> create it
+- exists, identical  -> skip it
+- exists, different  -> keep the existing file and write the new version as `<name>.new`
+                        (with --force: move the existing file to `<name>.bak`)
 
-Uso:
-    python3 install.py /caminho/do/projeto-alvo [--force] [--no-claude]
+Usage:
+    python3 install.py /path/to/target-project [--force] [--no-claude]
 """
 from __future__ import annotations
 import argparse, filecmp, shutil, sys
@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 COMMANDS = ["init", "requirements", "design", "evaluate", "publish", "status", "reverse"]
-# top-level files + trees copiados para .prumo/
+# top-level files + trees copied into .prumo/
 FILES = ["MANIFESTO.md"]
 TREES = ["gates", "skills", "commands", "templates", "docs"]
 
@@ -27,9 +27,9 @@ TREES = ["gates", "skills", "commands", "templates", "docs"]
 class Report:
     def __init__(self): self.created=[]; self.skipped=[]; self.conflicted=[]; self.backed_up=[]
     def summary(self):
-        out=[f"criados: {len(self.created)}", f"pulados (idênticos): {len(self.skipped)}"]
-        if self.backed_up: out += [f"sobrescritos c/ .bak: {len(self.backed_up)}"]+[f"  - {p}" for p in self.backed_up]
-        if self.conflicted: out += [f"conflitos (existente preservado, nova em .new): {len(self.conflicted)}"]+[f"  - {p}" for p in self.conflicted]
+        out=[f"created: {len(self.created)}", f"skipped (identical): {len(self.skipped)}"]
+        if self.backed_up: out += [f"overwritten with .bak: {len(self.backed_up)}"]+[f"  - {p}" for p in self.backed_up]
+        if self.conflicted: out += [f"conflicts (existing kept, new version in .new): {len(self.conflicted)}"]+[f"  - {p}" for p in self.conflicted]
         return "\n".join(out)
 
 
@@ -53,14 +53,14 @@ def install_tree(src_dir: Path, dest_dir: Path, force: bool, r: Report):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="Instala o Prumo num projeto.")
+    ap = argparse.ArgumentParser(description="Install Prumo into a project.")
     ap.add_argument("target", type=Path)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--no-claude", action="store_true")
     args = ap.parse_args(argv)
 
     if not (ROOT/"commands").is_dir() or not (ROOT/"skills").is_dir():
-        print("erro: rode a partir de um checkout completo do prumo", file=sys.stderr); return 2
+        print("error: run from a complete checkout of prumo", file=sys.stderr); return 2
 
     target = args.target.resolve(); target.mkdir(parents=True, exist_ok=True)
     prumo = target / ".prumo"; r = Report()
@@ -70,16 +70,16 @@ def main(argv=None):
     for t in TREES:
         install_tree(ROOT/t, prumo/t, args.force, r)
     if not args.no_claude:
-        # atalhos /prumo.<cmd>
+        # /prumo.<cmd> shortcuts
         for c in COMMANDS:
             src = ROOT/"commands"/f"{c}.md"
             if src.is_file():
                 install_file(src, target/".claude"/"commands"/"prumo"/f"{c}.md", args.force, r)
 
-    print(f"Prumo instalado em {prumo}")
+    print(f"Prumo installed in {prumo}")
     print(r.summary())
-    print("\nPróximo passo: abra o agente no projeto e rode /prumo.init "
-          "(.prumo/commands/init.md). O fluxo é "
+    print("\nNext step: open the agent in the project and run /prumo.init "
+          "(.prumo/commands/init.md). The flow is "
           "init → requirements → design → evaluate → publish.")
     return 0
 

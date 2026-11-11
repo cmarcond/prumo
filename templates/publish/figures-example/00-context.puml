@@ -1,14 +1,14 @@
-' Exemplo de figura de CONTEXTO (C4 nível 1) — alto nível, atores + sistema.
-' O agente do /prumo.publish gera uma destas a partir de design.json (atores = client/external).
+' Example of a CONTEXT figure (C4 level 1) — high level, actors + system.
+' The /prumo.publish agent generates one of these from design.json (actors = client/external).
 @startuml
 !include <C4/C4_Context>
 LAYOUT_WITH_LEGEND()
-title Visao de contexto — <Sistema>
+title Context view — <System>
 
-Person(creator, "Criador", "Envia conteudo")
-Person(viewer, "Espectador", "Consome conteudo")
-System(sys, "<Sistema>", "O que estamos projetando")
+Person(creator, "Creator", "Uploads content")
+Person(viewer, "Viewer", "Consumes content")
+System(sys, "<System>", "What we are designing")
 
-Rel(creator, sys, "envia", "HTTPS")
-Rel(viewer, sys, "consome", "HTTPS")
+Rel(creator, sys, "uploads", "HTTPS")
+Rel(viewer, sys, "consumes", "HTTPS")
 @enduml
