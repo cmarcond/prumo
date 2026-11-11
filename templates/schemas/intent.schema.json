@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "intent.schema.json",
-  "title": "Stage 06 — intent (benchmark seed; no solution leakage)",
+  "title": "Intent — thin seed (no solution leakage)",
   "type": "object",
   "required": ["video_id", "problem", "goal", "scope_in", "scope_out", "context_assumptions", "source", "confidence"],
   "additionalProperties": true,

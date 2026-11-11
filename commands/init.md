@@ -1,7 +1,7 @@
-# /prumo.init — Problem Gates → intent + requirements skeleton
+# /prumo.init — Problem Gates → thin intent
 
 Initialization script. Precondition: `.prumo/` installed. Outputs (in the **project
-root**): a filled-in `questions.md`, `intent.json`, `requirements.json` (skeleton).
+root**): a filled-in `questions.md` and a thin `intent.json`.
 
 > **Path convention — framework vs. results.** `.prumo/` holds the
 > **framework/method** (MANIFESTO, `gates/`, `skills/`, `templates/`, `docs/`),
@@ -16,7 +16,7 @@ root**): a filled-in `questions.md`, `intent.json`, `requirements.json` (skeleto
 
 ## Step 0 — Mode and constitution
 - Guided mode (default) or automatic mode (if the user asks for it).
-- Re-read `manifesto.md` (the principles already hold — do not ask whether the user
+- Re-read `.prumo/MANIFESTO.md` (the principles already hold — do not ask whether the user
   "wants to find the bottleneck": that is constitution) and `gates/gates.md` (the
   Design Gates that will govern the design).
 

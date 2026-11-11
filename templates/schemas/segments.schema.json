@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "segments.schema.json",
-  "title": "Stage 05 — phase segmentation of the transcript",
+  "title": "Phase segmentation of a transcript (benchmark pipeline; not used by the commands)",
   "type": "object",
   "required": ["video_id", "problem_hint", "format", "phases", "anchors", "confidence"],
   "additionalProperties": true,

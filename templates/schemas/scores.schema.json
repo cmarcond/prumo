@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "scores.schema.json",
-  "title": "Stage 10 — reproduction benchmark scores (agent vs instructor ground truth)",
+  "title": "Scores — evaluation rubric dimensions",
   "type": "object",
   "required": ["video_id", "dimensions", "overall"],
   "additionalProperties": true,

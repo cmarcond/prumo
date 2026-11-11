@@ -37,7 +37,9 @@ gate catches it. It reports findings; you either accept them (adjust the score) 
 them with a justification. Record mutations applied × mutations that survived.
 
 ## Step 3 — Ratchet
-Compare each score with `ratchet.json` (key = the problem's slug). Higher → the floor
+Compare each score with `ratchet.json` in the root (if it does not exist yet, start it
+from the template `templates/ratchet.json`; the floors live under `designs`, keyed by the
+problem's slug). Higher → the floor
 rises. Lower than `floor - buffer` → regression:
 - `warn` ⇒ an alert in the rubric;
 - `block` ⇒ HALT, report to the user;

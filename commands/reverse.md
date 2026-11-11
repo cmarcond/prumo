@@ -17,7 +17,7 @@ thin `intent.json`, to shorten the init.
 
 ## Step 0 — Mode and target
 - Receive the **path of the target project**. Guided mode (default) or automatic mode.
-- Re-read `manifesto.md` and `gates/gates.md`: the design you are going to invert has to
+- Re-read `.prumo/MANIFESTO.md` and `gates/gates.md`: the design you are going to invert has to
   be defensible by the same gates, so it is through them that you read the code.
 
 ## Step 1 — Reverse architect's reading (map the materialized solution)

@@ -1,6 +1,6 @@
-# Design Gates — generic library (catraca-SD, v0)
+# Design Gates — generic library (prumo, v0)
 
-Design-reasoning gates, derived from the anti-patterns in `patterns.md` and generalized.
+Design-reasoning gates, derived from the anti-patterns in `docs/method-patterns.md` and generalized.
 They are **problem-agnostic** (they do not contain the answer to any video). Each gate has:
 the principle, the **RED** condition, the skill it forces, and the layer (DET = checkable
 over the graph/arithmetic; ADV = adversarial verifier run by a sub-agent).

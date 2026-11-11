@@ -1,22 +1,22 @@
-# Method Patterns — final library (full corpus: 82 videos)
+# Method Patterns — pattern library (full corpus: 82 videos)
 
 Provenance = the number of videos in the corpus (out of 82) whose heuristics/anti-patterns/decisions
-show the pattern (keyword bucketing over the `video-observation.json` files; it is a
-floor, not exact). **Technique** patterns become a skill + gate; **style** patterns are
+show the pattern (keyword bucketing over the per-video observation files, which are not part of
+this repo; it is a floor, not exact). **Technique** patterns become a skill + gate; **style** patterns are
 only recorded (they inform fidelity, they do not become a gate).
 
 ## Tier 1 — almost universal (>50/82)
 | pattern | /82 | essence | skill / gate |
 |---|---|---|---|
 | async-propagate | **78** | persist+ack immediately, propagate async; decouple through a broker; explicit push-vs-pull; no synchronous fan-out before the ack | `decouple-with-async-propagation`, `persist-before-external-visibility` / G-ASYNC, G-PERSIST-BEFORE-VISIBLE |
-| datastore-by-access | **72** | choose the DB/index by the read:write ratio and the shape of the query; the simplest technology that fits (B-tree/Dynamo read-heavy; LSM/Cassandra write-heavy) | `choose-datastore-by-access-pattern` / G-INLINE, G-FREETEXT |
+| datastore-by-access | **72** | choose the DB/index by the read:write ratio and the shape of the query; the simplest technology that fits (B-tree/Dynamo read-heavy; LSM/Cassandra write-heavy) | `choose-datastore-by-access-pattern` / G-FREETEXT |
 | staleness-lever | **63** | exploit what the problem tolerates (staleness/approximation) as the key move: batch, precompute, TTL | `exploit-tolerated-weakness` / G-LEVER |
 
 ## Tier 2 — strong (40–46/82)
 | pattern | /82 | essence | skill / gate |
 |---|---|---|---|
 | partition/hot-partition | **46** | partition key without skew; avoid scatter-gather; read-heavy hotspot → replicas | `partition-keys-and-hot-partitions` / G-HOTPART |
-| ml-method | **46** | ML method: approach derived from the requirement, two-stage (candidate→rank), persist the model, train/serve parity, the label comes from the action, normalize features, metric by cost of error, baseline before complexity | `ml-system-design` / G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-TRAIN-SERVE-PARITY, **G-BASELINE-FIRST**, **G-COLD-START** |
+| ml-method | **46** | ML method: approach derived from the requirement, two-stage (candidate→rank), persist the model, train/serve parity, the label comes from the action, normalize features, metric by cost of error, baseline before complexity | `ml-system-design` / G-TWO-STAGE-RANK, G-MODEL-PERSIST, **G-ML-FEATURE-ENG**, **G-COLD-START** |
 | oltp-olap | **41** | take analytical reads/training off the operational store; analytics via CDC→warehouse; no dual writes | `separate-operational-from-analytical` / G-OLTP-OLAP, **G-NO-DUAL-WRITES** |
 | idempotency/partial-failure | **41** | enumerate partial failures; persist the key before the call; order with the least-bad failure; the ladder let-it-fail→idempotent retry→2PC→consensus | `design-for-partial-failure` / G-IDEMPOTENT, G-UNIQUENESS, G-ORDERING |
 
@@ -27,7 +27,7 @@ only recorded (they inform fidelity, they do not become a gate).
 | naive-first | **34** | naive → expose the failure → refine; enumerate by axes of variation and rank | `iterate-naive-to-optimal` / G-NO-REINVENT, G-NAIVE-FIRST |
 | workload-classify | **34** | classify the workload (read/write/total-ordering) first; the fork chooses the architecture | **`classify-workload-first`** (new) |
 | binding-constraint | **33** | compute the bottleneck candidates and design for the dominant one; translate it into a number of machines | `find-the-binding-constraint` / G-AMPLIFICATION, G-CAPACITY |
-| scope-blackbox | **31** | sub-problem → a named black box; do not roll your own consensus/crypto; build the core before collapsing into managed | `scope-defer-and-blackbox` / G-SCOPE |
+| scope-blackbox | **31** | sub-problem → a named black box; do not roll your own consensus/crypto; build the core before collapsing into managed | `scope-defer-and-blackbox` |
 
 ## Tier 4 — present (13–22/82)
 | pattern | /82 | essence | skill / gate |

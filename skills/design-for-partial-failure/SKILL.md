@@ -105,5 +105,5 @@ MATERIALIZATION.
 
 Distilled from the method-pattern build-set: MP3 *failure-driven design* (3/8)
 and MP4 *idempotency: persist-before-call* (3/8). Counts are the number of
-build-set videos in which each pattern was observed. See
-`meta/method-patterns/patterns.md`.
+build-set videos in which each pattern was observed. The full-corpus pattern
+library is `docs/method-patterns.md` (row *idempotency/partial-failure*).

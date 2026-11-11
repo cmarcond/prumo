@@ -8,7 +8,7 @@ Prumo is the sibling of [`catraca`](https://github.com/cmarcond/catraca) (spec-d
 the same philosophy (text artifacts that guide an agent; the agent executes),
 applied to system design. It is a layer of Markdown/YAML files (gates, skills,
 commands, schemas) installed into `.prumo/`; the host agent executes. The gates
-and skills were distilled from a real corpus of system-design interviews; see
+and skills were distilled from system-design interview walkthroughs; see
 `docs/method-patterns.md` and `docs/catraca-study.md`.
 
 ## The idea in one sentence
@@ -25,9 +25,9 @@ red → green → refactor loop as catraca, only applied to the design. A **ratc
 | Problem Gates | `gates/questions.md` | what the **owner** decides (scope, scale, guarantees, cost) |
 | Design Gates | `gates/gates.md` | what **fails** a design (DET lints + ADV verifiers) |
 | Skills | `skills/` + `index.yaml` | **how** to design well (each skill repairs the gate it backs) |
-| Commands | `commands/` | `init` → `requirements` → `design` → `evaluate` → `publish` |
-| Memory | `templates/ratchet.json` | a quality floor that only goes up |
-| Schemas | `templates/schemas/` | the format of requirements / design / scores |
+| Commands | `commands/` | `init` → `requirements` → `design` → `evaluate` → `publish`, plus the auxiliary `status` and `reverse` |
+| Memory | `ratchet.json` (project root; starts from the template `templates/ratchet.json`) | a quality floor that only goes up |
+| Schemas | `templates/schemas/` | the format of intent / requirements / design / scores (plus `segments`, inherited from the benchmark pipeline and not used by any command) |
 
 ## Layout in the project — framework vs. results
 The installer creates `.prumo/` in the target project. The separation is:
@@ -78,7 +78,9 @@ in the commands mean `.prumo/…`, for **reading**.
 > never the finished requirements. Deriving the requirements is part of what is
 > measured.
 
-**Auxiliary entry point.** `/prumo.reverse` goes the other way: it starts from an
+**Auxiliary commands.** `/prumo.status` reconciles state: use it after editing an
+answer in `./questions.md` or when resuming work; it reports the current phase,
+the pending gates and the next action. `/prumo.reverse` goes the other way: it starts from an
 **existing project** (a path) and reconstructs the *seed* (problem statement +
 Problem Gates) that, given to `/prumo.init`, would regenerate that design. Validate
 it by round-trip: run the seed through the flow and compare the `design.json` with
@@ -92,12 +94,10 @@ Idempotent; creates `.prumo/` in the target + `/prumo.*` shortcuts in
 `.claude/commands/prumo/`.
 
 ## Status
-v0, distilled from a pilot of 10 videos. Blind reproduction of held-out problems
-(intent + skills + gates) rises from ~0.63 (zero-shot) to ~0.75 (versioned with
-gates). The DET gates still depend on annotations in `design.json`; the
+v0. The gates and skills were distilled from system-design interview
+walkthroughs. The DET gates still depend on annotations in `design.json`; the
 loop-until-green is currently a command script, not an automated runner. Next:
-automate the loop, thicken the gates/skills with the full corpus (82 videos),
-triangulate the evaluation.
+automate the loop and triangulate the evaluation.
 
 ## License
 
