@@ -1,17 +1,17 @@
-# /prumo.status — Reconciliar estado
+# /prumo.status — Reconcile state
 
-Use após editar uma resposta em `./questions.md` (raiz) ou retomar trabalho.
+Use it after editing an answer in `./questions.md` (root) or when resuming work.
 
-> **Caminhos:** os resultados (`questions.md`, `intent.json`, `requirements.json`,
-> `design/`, `evaluation/`, `ratchet.json`) ficam na **raiz**; o framework é lido de
-> `.prumo/`. Convenção completa em `/prumo.init`.
+> **Paths:** the results (`questions.md`, `intent.json`, `requirements.json`,
+> `design/`, `evaluation/`, `ratchet.json`) live in the **root**; the framework is read
+> from `.prumo/`. Full convention in `/prumo.init`.
 
-1. Releia `./questions.md`, `./intent.json`, `./requirements.json` e a última versão
-   em `./design/` (tudo na raiz).
-2. Se uma Problem Gate mudou: marque os artefatos afetados (intent/requirements/
-   design) e proponha a reconciliação (ex.: mudou a razão read:write → re-rodar o
-   gargalo e os gates de capacidade/amplificação).
-3. Reporte: em que fase está (init / design vN / evaluate), gates pendentes, e a
-   próxima ação (`/prumo.init`, `/prumo.design` ou `/prumo.evaluate`).
-4. Nunca reescreva decisões do dono sem confirmar; o agente executa design, não
-   redefine o problema.
+1. Re-read `./questions.md`, `./intent.json`, `./requirements.json` and the latest version
+   in `./design/` (all in the root).
+2. If a Problem Gate changed: mark the affected artifacts (intent/requirements/
+   design) and propose the reconciliation (e.g. the read:write ratio changed → re-run the
+   bottleneck and the capacity/amplification gates).
+3. Report: which phase it is in (init / design vN / evaluate), pending gates, and the
+   next action (`/prumo.init`, `/prumo.design` or `/prumo.evaluate`).
+4. Never rewrite the owner's decisions without confirming; the agent executes the design,
+   it does not redefine the problem.

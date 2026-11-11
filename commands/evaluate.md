@@ -1,53 +1,53 @@
-# /prumo.evaluate — Rubrica + auditoria de contexto limpo + ratchet
+# /prumo.evaluate — Rubric + clean-context audit + ratchet
 
-Avalia o design final de um problema. Pré-condição: `/prumo.design` convergiu
-(gates verdes). Saídas (na **raiz do projeto**): `evaluation/<slug>.md` +
-`ratchet.json` atualizado.
+Evaluates the final design of a problem. Precondition: `/prumo.design` has converged
+(gates green). Outputs (in the **project root**): `evaluation/<slug>.md` +
+an updated `ratchet.json`.
 
-> **Caminhos:** `evaluation/` e `ratchet.json` vão na **raiz**; o framework
-> (`gates/`, `skills/`, `templates/`) é lido de `.prumo/`. Convenção completa em
-> `/prumo.init`. Exceção deliberada: promover um gate/skill (Passo 4) **edita** o
-> framework em `.prumo/gates/gates.md` ou `.prumo/skills/` — é mudança do *método*,
-> que deve voltar para o repo do Prumo, não um resultado do problema.
+> **Paths:** `evaluation/` and `ratchet.json` go in the **root**; the framework
+> (`gates/`, `skills/`, `templates/`) is read from `.prumo/`. Full convention in
+> `/prumo.init`. Deliberate exception: promoting a gate/skill (Step 4) **edits** the
+> framework in `.prumo/gates/gates.md` or `.prumo/skills/` — it is a change to the
+> *method*, which must go back to the Prumo repo, not a result of the problem.
 
-## Dois modos
-- **Benchmark** (existe ground truth do mestre): compare `design/v_final` contra
-  o `requirements.json` + `design.json` de referência, nas dimensões abaixo. É o
-  **meta-gate** — mede se intent + skills + gates reproduzem o mestre.
-- **Standalone** (sem ground truth): pontue só pelos gates (quantos verdes,
-  quantos exigiram quantas iterações) + a auditoria limpa. Não há "match", mas há
-  "passou nos gates e sobreviveu à refutação".
+## Two modes
+- **Benchmark** (the instructor's ground truth exists): compare `design/v_final` against
+  the reference `requirements.json` + `design.json`, on the dimensions below. This is the
+  **meta-gate** — it measures whether intent + skills + gates reproduce the instructor.
+- **Standalone** (no ground truth): score by the gates alone (how many are green,
+  how many needed how many iterations) + the clean audit. There is no "match", but there
+  is "passed the gates and survived refutation".
 
-## Passo 1 — Rubrica (com evidência por linha)
-Dimensões (0..1), conforme `templates/schemas/scores.schema.json`:
-- `requirements_coverage` — funcionais + não-funcionais cobertos.
-- `estimation_fidelity` — números na ordem de grandeza certa / raciocínio correto.
-- `design_match` — casamento semântico de componentes/arestas/decisões (benchmark)
-  **ou** cobertura dos gates aplicáveis (standalone).
-- `criteria_coverage` — as heurísticas de método aparecem (gargalo achado, naive
-  rejeitada nomeada, tolerância usada como alavanca…).
-- `baseline_gap` — onde o design diverge da baseline neutra do arquiteto (o
-  movimento não-óbvio). Sem evidência, 0.
+## Step 1 — Rubric (with evidence per line)
+Dimensions (0..1), per `templates/schemas/scores.schema.json`:
+- `requirements_coverage` — functional + non-functional requirements covered.
+- `estimation_fidelity` — numbers in the right order of magnitude / correct reasoning.
+- `design_match` — semantic match of components/edges/decisions (benchmark)
+  **or** coverage of the applicable gates (standalone).
+- `criteria_coverage` — the method heuristics show up (bottleneck found, rejected
+  naive alternative named, tolerance used as a lever…).
+- `baseline_gap` — where the design diverges from the architect's neutral baseline (the
+  non-obvious move). With no evidence, 0.
 
-## Passo 2 — Auditoria de contexto limpo
-Delegue a um subagente **sem acesso a quem gerou o design** (e, no benchmark, que
-não viu o ground truth ao desenhar): re-execute os gates DET (refaça as contas),
-e **mute o design** (injete um anti-padrão) para confirmar que o gate pega. Ele
-reporta achados; você acata (ajusta score) ou refuta com justificativa. Registre
-mutações aplicadas × sobreviventes.
+## Step 2 — Clean-context audit
+Delegate to a subagent **with no access to whoever generated the design** (and, in the
+benchmark, that did not see the ground truth while designing): re-run the DET gates (redo
+the calculations), and **mutate the design** (inject an anti-pattern) to confirm that the
+gate catches it. It reports findings; you either accept them (adjust the score) or refute
+them with a justification. Record mutations applied × mutations that survived.
 
-## Passo 3 — Ratchet
-Compare cada score com `ratchet.json` (chave = slug do problema). Maior → sobe o
-piso. Menor que `piso - buffer` → regressão:
-- `warn` ⇒ alerta na rubrica;
-- `block` ⇒ HALT, reporte ao usuário;
-- `repair` ⇒ volte ao `/prumo.design` com os REDs/diferenças como itens de refino
-  (nova versão), reavalie uma vez; recuperou ⇒ segue, senão ⇒ HALT.
-Guarde a progressão de versões (v1→vN) e o piso por dimensão.
+## Step 3 — Ratchet
+Compare each score with `ratchet.json` (key = the problem's slug). Higher → the floor
+rises. Lower than `floor - buffer` → regression:
+- `warn` ⇒ an alert in the rubric;
+- `block` ⇒ HALT, report to the user;
+- `repair` ⇒ go back to `/prumo.design` with the REDs/differences as refinement items
+  (a new version), re-evaluate once; recovered ⇒ carry on, otherwise ⇒ HALT.
+Keep the progression of versions (v1→vN) and the floor per dimension.
 
-## Passo 4 — Encerramento
-Resuma: verdict, scores por dimensão, gates que exigiram iteração, e (se
-benchmark) as divergências do mestre — cada divergência é candidata a **novo
-gate** (`.prumo/gates/gates.md`) ou nova skill (`.prumo/skills/`). Lacuna vira
-conhecimento incorporado. Promover é mudança **do método** (volta para o repo do
-Prumo), distinta dos resultados na raiz; faça-a deliberadamente, não em silêncio.
+## Step 4 — Wrap-up
+Summarize: verdict, scores per dimension, gates that needed iteration, and (if
+benchmark) the divergences from the instructor — each divergence is a candidate for a
+**new gate** (`.prumo/gates/gates.md`) or a new skill (`.prumo/skills/`). A gap becomes
+incorporated knowledge. Promoting is a change **to the method** (it goes back to the
+Prumo repo), distinct from the results in the root; do it deliberately, not silently.

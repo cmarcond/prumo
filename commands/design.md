@@ -1,68 +1,68 @@
-# /prumo.design — Loop de design versionado (red → green → refactor)
+# /prumo.design — Versioned design loop (red → green → refactor)
 
-O coração do Prumo. Produz o design por **versões**, com os Design Gates
-reprovando entre elas, até verde. Pré-condição: `intent.json` (do `/prumo.init`) +
-`requirements.json` rico e completo (do **`/prumo.requirements`**, já passado pelo
-gate G-REQ-COMPLETENESS). Saídas (na **raiz do projeto**):
-`design/v1..vN/{requirements.json,design.json,design.mmd,critique.md}` e
-`design/v_final` simbólico para a melhor versão.
+The heart of Prumo. It produces the design in **versions**, with the Design Gates
+failing between them, until green. Precondition: `intent.json` (from `/prumo.init`) +
+a rich and complete `requirements.json` (from **`/prumo.requirements`**, already past
+the G-REQ-COMPLETENESS gate). Outputs (in the **project root**):
+`design/v1..vN/{requirements.json,design.json,design.mmd,critique.md}` and a
+symbolic `design/v_final` pointing to the best version.
 
-> **Caminhos:** `design/` vai na **raiz**; o framework (`gates/`, `skills/`,
-> `templates/`) é lido de `.prumo/`. Convenção completa em `/prumo.init`.
+> **Paths:** `design/` goes in the **root**; the framework (`gates/`, `skills/`,
+> `templates/`) is read from `.prumo/`. Full convention in `/prumo.init`.
 
-## Princípio
-Nunca produza o design final de uma vez (zero-shot tende à "baseline neutra" e
-perde o movimento que distingue um bom design). Itere naive → ótimo, como manda a
-skill `iterate-naive-to-optimal`.
+## Principle
+Never produce the final design in one go (zero-shot tends toward the "neutral
+baseline" and loses the move that distinguishes a good design). Iterate naive →
+optimal, as the `iterate-naive-to-optimal` skill requires.
 
-## Passo 0 — Eixos de variação (skill `enumerate-variations`)
-Antes de desenhar, nomeie os **eixos de variação** do problema (consistência
-forte×eventual, deadline fixo×dinâmico, exato×aproximado, acesso contínuo×intermitente,
-regime read-heavy×write-heavy). Para cada eixo com impacto arquitetural, decida:
-desenhar a variação distinta, ou colapsar com justificativa. Gate `G-ENUMERATE-VARIATIONS`.
+## Step 0 — Axes of variation (skill `enumerate-variations`)
+Before drawing, name the problem's **axes of variation** (strong×eventual
+consistency, fixed×dynamic deadline, exact×approximate, continuous×intermittent access,
+read-heavy×write-heavy regime). For each axis with architectural impact, decide:
+draw the distinct variation, or collapse it with a justification. Gate `G-ENUMERATE-VARIATIONS`.
 
-## Passo 1 — v1 (primeira versão)
-Aplicando as skills (`skills/index.yaml`), produza:
-- `requirements.json` completo — **faça o back-of-the-envelope** (skill
-  `find-the-binding-constraint`): estime os candidatos a gargalo e nomeie o que
-  limita. Não pule a conta.
-- `design.json` (componentes + arestas, conforme `templates/schemas/design.schema.json`)
-  e `design.mmd` (Mermaid a partir dos nós/arestas).
+## Step 1 — v1 (first version)
+Applying the skills (`skills/index.yaml`), produce:
+- a complete `requirements.json` — **do the back-of-the-envelope calculation** (skill
+  `find-the-binding-constraint`): estimate the bottleneck candidates and name the one
+  that limits. Do not skip the calculation.
+- `design.json` (components + edges, per `templates/schemas/design.schema.json`)
+  and `design.mmd` (Mermaid built from the nodes/edges).
 
-## Passo 2 — Gate critique (red)
-Rode TODOS os gates de `gates/gates.md` contra a versão atual:
-- **DET** (lints sobre o grafo + aritmética): compute concretamente
-  (amplificação pós-fan-out, soma de capacidade vs demanda, partition key skewed,
-  idempotência antes de chamada externa, blob fora do app server…). Verifique
-  sobre `design.json` (anote `consistency`/`partition_key`/`payload`/`idempotent`
-  nos elementos para tornar o lint mecânico).
-- **ADV** (verificadores adversariais): para cada requisito não-funcional, um
-  sub-agente tenta **refutar** que o design o atende (acha a carga/falha/sequência
-  que quebra). RED se a maioria refuta.
-Grave `critique.md` (gate | verdict RED/AMBER/GREEN | issue | fix + skill).
+## Step 2 — Gate critique (red)
+Run ALL the gates in `gates/gates.md` against the current version:
+- **DET** (lints over the graph + arithmetic): compute concretely
+  (post-fan-out amplification, summed capacity vs demand, skewed partition key,
+  idempotency before an external call, blob kept off the app server…). Check
+  against `design.json` (annotate `consistency`/`partition_key`/`payload`/`idempotent`
+  on the elements to make the lint mechanical).
+- **ADV** (adversarial verifiers): for each non-functional requirement, a
+  sub-agent tries to **refute** that the design meets it (it finds the load/failure/sequence
+  that breaks it). RED if the majority refute.
+Write `critique.md` (gate | verdict RED/AMBER/GREEN | issue | fix + skill).
 
-## Passo 3 — vN+1 (green)
-Se houver RED: refine a versão endereçando **cada** RED, aplicando a skill que
-faz o conserto (a coluna "skill" do gate / `backs_gates` no index). É permitido
-mudar a arquitetura quando um gate exige (dropar store redundante, re-keyar log,
-trocar engine pela forma do workload). Re-rode o Passo 2.
+## Step 3 — vN+1 (green)
+If there is any RED: refine the version, addressing **each** RED by applying the skill
+that does the repair (the gate's "skill" column / `backs_gates` in the index). Changing
+the architecture is allowed when a gate demands it (drop a redundant store, re-key a log,
+swap the engine to fit the shape of the workload). Re-run Step 2.
 
-## Passo 4 — Convergência e refactor
-Pare quando todos os gates ficarem GREEN (ou após K iterações sem novo RED).
-Então **refactor**: simplifique (menos componentes) mantendo tudo verde.
+## Step 4 — Convergence and refactor
+Stop when all the gates are GREEN (or after K iterations with no new RED).
+Then **refactor**: simplify (fewer components) while keeping everything green.
 
-## Passo 4b — Materialização de tech (skill `materialize-tech-choices`)
-Com a estrutura estável, **nomeie a tecnologia concreta de cada componente**
-justificada pela forma do acesso (write-heavy+scans→LSM/Cassandra; point-lookup
-read-heavy→DynamoDB/B-tree; stream→Kafka; etc.), em `tech_choices`. Nenhum componente
-pode ficar como abstração genérica. Escolhas não-óbvias citam 1 alternativa rejeitada.
-Gate `G-MATERIALIZE-TECH`. Marque então a versão como `v_final`.
+## Step 4b — Tech materialization (skill `materialize-tech-choices`)
+With the structure stable, **name the concrete technology of each component**,
+justified by the shape of the access (write-heavy+scans→LSM/Cassandra; read-heavy
+point lookup→DynamoDB/B-tree; stream→Kafka; etc.), in `tech_choices`. No component
+may be left as a generic abstraction. Non-obvious choices cite 1 rejected alternative.
+Gate `G-MATERIALIZE-TECH`. Then mark the version as `v_final`.
 
-## Passo 5 — Mutação (provar os gates)
-Para os gates críticos do problema, injete o anti-padrão no `design.json`
-(trocar store forte por eventual; partition key skewed; remover o persist de
-idempotência) e confirme que o gate correspondente fica RED. Gate que não pega a
-mutação não está instalado — registre.
+## Step 5 — Mutation (prove the gates)
+For the gates that are critical to the problem, inject the anti-pattern into `design.json`
+(swap a strong store for an eventual one; a skewed partition key; remove the idempotency
+persist) and confirm that the corresponding gate goes RED. A gate that does not catch the
+mutation is not installed — record it.
 
-## Saída
-Anuncie `/prumo.evaluate` (rubrica + ratchet). Em modo automático, siga direto.
+## Output
+Announce `/prumo.evaluate` (rubric + ratchet). In automatic mode, go straight on.

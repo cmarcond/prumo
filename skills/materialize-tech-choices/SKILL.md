@@ -1,37 +1,37 @@
 # Materialize Tech Choices
 
-Depois que a estrutura do design (componentes + arestas) está verde, **materialize**:
-nomeie a tecnologia concreta de cada componente e justifique pela forma do acesso.
-O manifesto separa princípio (o que o componente faz) de materialização (a tech que o
-realiza) — esta skill é o passo de materialização, e fecha a lacuna nº1 medida nos 15
-runs (33% das nuances ficaram "princípio certo, tech não nomeada").
+Once the structure of the design (components + edges) is green, **materialize**:
+name the concrete technology of each component and justify it by the shape of the access.
+The manifesto separates principle (what the component does) from materialization (the tech
+that realizes it) — this skill is the materialization step, and it closes gap no. 1 measured
+in the 15 runs (33% of the nuances ended up "right principle, tech not named").
 
 ## When To Use
-- Sempre, ao finalizar o design — cada componente precisa de uma tech nomeada.
-- Quando uma escolha de tech não é óbvia (citar 1 alternativa e por que perdeu).
+- Always, when finalizing the design — each component needs a named tech.
+- When a tech choice is not obvious (cite 1 alternative and why it lost).
 
 ## When Not To Use
-- Num spike descartável. Numa fase de estrutura ainda instável (materialize depois que a topologia parar de mudar).
+- In a throwaway spike. In a phase where the structure is still unstable (materialize after the topology stops changing).
 
 ## Preconditions
-- `design.json` com componentes/arestas e a forma do workload (read:write, consistência, payload) conhecida.
+- `design.json` with components/edges, and the shape of the workload (read:write, consistency, payload) known.
 
 ## Order Of Operations
-1. Para cada componente, escreva `tech_choices[{component, choice, rationale}]`: a tech concreta + uma linha amarrando à característica de acesso (ex.: "write-heavy + scans → Cassandra/LSM"; "read-heavy point lookup → DynamoDB/B-tree"; "stream de eventos → Kafka").
-2. Onde a escolha é não-óbvia, registre `alternatives_considered` e o motivo da rejeição.
-3. Não deixe nenhum componente como abstração genérica ("um log durável", "um object store") sem tech nomeada.
-4. Roll-from-scratch vs managed: decida explicitamente (evite lock-in onde o nível do problema pede o de baixo).
+1. For each component, write `tech_choices[{component, choice, rationale}]`: the concrete tech + one line tying it to the access characteristic (e.g. "write-heavy + scans → Cassandra/LSM"; "read-heavy point lookup → DynamoDB/B-tree"; "event stream → Kafka").
+2. Where the choice is non-obvious, record `alternatives_considered` and the reason for the rejection.
+3. Do not leave any component as a generic abstraction ("a durable log", "an object store") with no named tech.
+4. Roll-from-scratch vs managed: decide explicitly (avoid lock-in where the level of the problem calls for the lower-level one).
 
 ## Test Checklist
-- [ ] Todo componente de `design.json` tem uma `tech_choice` nomeada.
-- [ ] Cada escolha cita a característica de acesso que a justifica (não é catálogo).
-- [ ] Escolhas não-óbvias têm ≥1 alternativa considerada com motivo.
+- [ ] Every component in `design.json` has a named `tech_choice`.
+- [ ] Each choice cites the access characteristic that justifies it (it is not a catalogue).
+- [ ] Non-obvious choices have ≥1 alternative considered, with a reason.
 
 ## Anti-Patterns
-- Componentes como abstrações genéricas sem tech nomeada.
-- Nomear tech sem amarrar ao padrão de acesso.
-- Lock-in de vendor onde rolar-do-zero é o esperado (ou o inverso).
+- Components as generic abstractions with no named tech.
+- Naming a tech without tying it to the access pattern.
+- Vendor lock-in where rolling from scratch is what is expected (or the reverse).
 
 ## Provenance
-Derivada da análise dos 15 runs: a maior fatia das nuances perdidas era partial por
-falta de materialização concreta de tecnologia. Backs gate **G-MATERIALIZE-TECH**.
+Derived from the analysis of the 15 runs: the largest share of the missed nuances were
+partials for lack of a concrete materialization of technology. Backs gate **G-MATERIALIZE-TECH**.

@@ -1,58 +1,58 @@
 # ML System Design
 
-Projetar a parte de ML de um sistema. O método é tão importante quanto a arquitetura:
-**escolher o algoritmo pelo dado disponível, fazer feature-engineering de verdade,
-escolher o modelo pela forma da saída, e separar treino de serventia.** Versão
-aprofundada — os 15 runs mostraram que o ramo ML era o de menor cobertura (o gap era
-feature-engineering e survey de algoritmo, não arquitetura).
+Design the ML part of a system. The method is as important as the architecture:
+**choose the algorithm by the available data, do real feature engineering,
+choose the model by the shape of the output, and separate training from serving.** A
+deepened version — the 15 runs showed that the ML branch was the one with the lowest
+coverage (the gap was feature engineering and the algorithm survey, not architecture).
 
 ## When To Use
-- O sistema tem um componente de predição/recomendação/ranking/classificação.
+- The system has a prediction/recommendation/ranking/classification component.
 
 ## When Not To Use
-- Não há aprendizado; uma regra/heurística determinística resolve. (Não force ML.)
+- There is no learning; a deterministic rule/heuristic solves it. (Do not force ML.)
 
 ## Preconditions
-- Intent + requirements; saber qual ação do produto vira o **label**, e que dados existem.
+- Intent + requirements; knowing which product action becomes the **label**, and what data exists.
 
 ## Order Of Operations
-1. **Survey de algoritmo por dado disponível** (é uma *variação* — use `enumerate-variations`):
-   - sem interações ainda → **content-based** (features do item);
-   - muitas interações item↔item → **item-collaborative** (tabela de similaridade item-item; cuidado com o custo O(itens²));
-   - mais dado de usuário que de item → **user-collaborative**;
-   - escala grande → **two-stage** (candidate generation barato → ranking caro).
-   Nomeie as alternativas e escolha por critério (dado disponível, escala).
-2. **Label a partir da ação do produto** (clique, follow, compra = label); e como **obter dados rotulados** (logs de interação, rótulos implícitos).
-3. **Feature engineering** (onde o gap mora):
-   - **reduzir dimensionalidade** (PCA/SVD/autoencoder; descartar componentes ruidosos) — não jogue features cruas de alta dimensão no modelo;
-   - **texto**: TF-IDF/embeddings, remover stop words — não use uma coluna por palavra;
-   - **normalizar/pré-processar** entradas (escala, formato);
-   - **um modelo por classe/tag** para multi-label quando fizer sentido.
-4. **Modelo pela forma da saída**: probabilidade graduada → regressão (logística/linear); binário → classificador. **Baseline-first**: comece simples (regressão/random forest) antes de GBM/rede neural; o complexo só se o simples falhar.
-5. **Métrica pelo custo do erro**: escolha por FP vs FN do domínio; trate **class imbalance** (down-sample/weights).
-6. **Similaridade/recall**: ANN para candidate generation; cuidado com distância em alta dimensão (cosine, não Minkowski que estoura).
-7. **Onde a computação vive**: feature-engineering e treino **offline no warehouse/lake** (Spark/Trino), via CDC do OLTP — nunca full-scan no store de serventia; **persistir o modelo** num model store e servir de lá (train/serve parity: mesmas features no treino e na serventia).
-8. **cold-start / explore-exploit**: trate, ou escope fora explicitamente.
+1. **Survey of algorithms by available data** (this is a *variation* — use `enumerate-variations`):
+   - no interactions yet → **content-based** (item features);
+   - many item↔item interactions → **item-collaborative** (item-item similarity table; watch out for the O(items²) cost);
+   - more user data than item data → **user-collaborative**;
+   - large scale → **two-stage** (cheap candidate generation → expensive ranking).
+   Name the alternatives and choose by a criterion (available data, scale).
+2. **Label from the product action** (click, follow, purchase = label); and how to **obtain labelled data** (interaction logs, implicit labels).
+3. **Feature engineering** (where the gap lives):
+   - **reduce dimensionality** (PCA/SVD/autoencoder; discard noisy components) — do not throw raw high-dimensional features at the model;
+   - **text**: TF-IDF/embeddings, remove stop words — do not use one column per word;
+   - **normalize/pre-process** the inputs (scale, format);
+   - **one model per class/tag** for multi-label when it makes sense.
+4. **Model by the shape of the output**: graded probability → regression (logistic/linear); binary → classifier. **Baseline-first**: start simple (regression/random forest) before GBM/neural network; the complex one only if the simple one fails.
+5. **Metric by the cost of the error**: choose by the domain's FP vs FN; handle **class imbalance** (down-sample/weights).
+6. **Similarity/recall**: ANN for candidate generation; watch out for distance in high dimensions (cosine, not Minkowski, which blows up).
+7. **Where the computation lives**: feature engineering and training **offline in the warehouse/lake** (Spark/Trino), via CDC from the OLTP — never a full scan on the serving store; **persist the model** in a model store and serve it from there (train/serve parity: the same features in training and in serving).
+8. **cold-start / explore-exploit**: handle them, or scope them out explicitly.
 
 ## Test Checklist
-- [ ] As famílias de algoritmo foram enumeradas e a escolha justificada pelo dado disponível.
-- [ ] O label vem de uma ação do produto; a origem dos dados rotulados está dita.
-- [ ] Há feature-engineering real (redução de dimensionalidade / encoding de texto / normalização), não features cruas.
-- [ ] Modelo escolhido pela forma da saída; há um baseline antes do complexo.
-- [ ] Métrica casa com o custo de erro; class imbalance tratado.
-- [ ] Treino/feature-eng offline (warehouse via CDC); modelo persistido e servido de um store; train/serve parity.
-- [ ] cold-start/explore-exploit tratado ou escopado fora.
+- [ ] The algorithm families were enumerated and the choice justified by the available data.
+- [ ] The label comes from a product action; the origin of the labelled data is stated.
+- [ ] There is real feature engineering (dimensionality reduction / text encoding / normalization), not raw features.
+- [ ] Model chosen by the shape of the output; there is a baseline before the complex model.
+- [ ] The metric matches the cost of error; class imbalance handled.
+- [ ] Training/feature engineering offline (warehouse via CDC); model persisted and served from a store; train/serve parity.
+- [ ] cold-start/explore-exploit handled or scoped out.
 
 ## Anti-Patterns
-- Features cruas de alta dimensão (uma coluna por palavra) sem redução.
-- **Clustering como redução de dimensionalidade** (gera conjuntos não-sobrepostos, encoda numa coluna só).
-- **DBSCAN/aglomerativo em alta dimensão** (não escalam/funcionam) — preferir métodos que lidam com alta dim.
-- **Decision tree para ranking** (regressão é melhor para probabilidade rankeável).
-- Overfit: modelo sofisticado demais (NN/SVM exótico) com pouco dado.
-- Distância Minkowski em alta dimensão (overflow colapsa as distâncias).
-- Query analítica/ETL no OLTP de serventia; modelo só na sessão (não persistido); train/serve skew.
+- Raw high-dimensional features (one column per word) with no reduction.
+- **Clustering as dimensionality reduction** (it produces non-overlapping sets, encodes into a single column).
+- **DBSCAN/agglomerative in high dimensions** (they do not scale/work) — prefer methods that handle high dimensions.
+- **Decision tree for ranking** (regression is better for a rankable probability).
+- Overfit: a model that is too sophisticated (NN/exotic SVM) with little data.
+- Minkowski distance in high dimensions (overflow collapses the distances).
+- Analytical query/ETL on the serving OLTP; model only in the session (not persisted); train/serve skew.
 
 ## Provenance
-ML aparece em 46/82; o aprofundamento (feature-eng, survey, métrica, baseline) vem dos
-vídeos ML (Visual Search, Recommendation Engine, PYMK, Ad Click, Video Rec) e fecha o
-gap medido nos 15 runs. Backs gates G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-COLD-START, **G-ML-FEATURE-ENG**.
+ML appears in 46/82; the deepening (feature engineering, survey, metric, baseline) comes from the
+ML videos (Visual Search, Recommendation Engine, PYMK, Ad Click, Video Rec) and closes the
+gap measured in the 15 runs. Backs gates G-TWO-STAGE-RANK, G-MODEL-PERSIST, G-COLD-START, **G-ML-FEATURE-ENG**.

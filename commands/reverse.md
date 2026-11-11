@@ -1,60 +1,63 @@
-# /prumo.reverse — Engenharia reversa: projeto existente → seed (problema + Problem Gates)
+# /prumo.reverse — Reverse engineering: existing project → seed (problem + Problem Gates)
 
-Entrada auxiliar do fluxo. Em vez de partir de um prompt, parte de **código pronto**
-e reconstrói o *seed* que, dado ao `/prumo.init`, regeneraria o design deste sistema.
-Pré-condição: `.prumo/` instalado + o **path de um projeto-alvo**. Saída (na **raiz do
-projeto** de resultados): o seed pronto para colar no `/prumo.init` — opcionalmente
-`questions.md` (Problem Gates respondidos) e `intent.json` fino, para encurtar o init.
+An auxiliary entry point to the flow. Instead of starting from a prompt, it starts from
+**finished code** and reconstructs the *seed* that, given to `/prumo.init`, would
+regenerate this system's design. Precondition: `.prumo/` installed + the **path of a
+target project**. Output (in the **root of the results project**): the seed ready to
+paste into `/prumo.init` — optionally `questions.md` (the answered Problem Gates) and a
+thin `intent.json`, to shorten the init.
 
-> **Caminhos:** o framework (`gates/`, `skills/`, `templates/`) é lido de `.prumo/`;
-> os resultados vão na **raiz**. Convenção completa em `/prumo.init`.
+> **Paths:** the framework (`gates/`, `skills/`, `templates/`) is read from `.prumo/`;
+> the results go in the **root**. Full convention in `/prumo.init`.
 
-> Regra de altitude: o prumo projeta o projeto no eixo **system design** — escala,
-> componentes, garantias. A história de *features/craft/TDD* NÃO é dele (é da catraca).
-> Se o projeto-alvo é CRUD sem desafio de escala, o seed sai magro — e tudo bem.
+> Altitude rule: prumo projects the project onto the **system design** axis — scale,
+> components, guarantees. The *features/craft/TDD* story is NOT its job (it belongs to
+> catraca). If the target project is CRUD with no scale challenge, the seed comes out
+> lean — and that is fine.
 
-## Passo 0 — Modo e alvo
-- Receba o **path do projeto-alvo**. Modo guiado (default) ou automático.
-- Releia `manifesto.md` e `gates/gates.md`: o design que você vai inverter precisa ser
-  defensável pelos mesmos gates, então é por eles que você lê o código.
+## Step 0 — Mode and target
+- Receive the **path of the target project**. Guided mode (default) or automatic mode.
+- Re-read `manifesto.md` and `gates/gates.md`: the design you are going to invert has to
+  be defensible by the same gates, so it is through them that you read the code.
 
-## Passo 1 — Leitura de arquiteto reversa (mapear a solução materializada)
-Leia, nesta ordem, o que revela o **design já tomado**: README; infra/deploy
-(`docker-compose*`, `k8s/*.yaml`, `*.tf`, Helm, Procfile); escolha de datastores,
-caches, filas, balanceadores; configs de réplica/escala/particionamento; métricas,
-SLAs, alertas, dashboards. Identifique **componentes + arestas reais** — isto é o
-`design.json` já materializado no projeto (não o escreva ainda; é insumo da inversão).
+## Step 1 — Reverse architect's reading (map the materialized solution)
+Read, in this order, what reveals the **design already made**: README; infra/deploy
+(`docker-compose*`, `k8s/*.yaml`, `*.tf`, Helm, Procfile); the choice of datastores,
+caches, queues, load balancers; replica/scaling/partitioning configs; metrics,
+SLAs, alerts, dashboards. Identify the **real components + edges** — this is the
+`design.json` already materialized in the project (do not write it yet; it is an input to
+the inversion).
 
-## Passo 2 — Inverter para os Problem Gates (sugerir a partir da evidência)
-Leia as perguntas do **template** `.prumo/gates/questions.md` (em branco — NÃO o edite)
-e, para cada gate (A→E / P1–P10), **infira** a resposta a partir da evidência no
-código, citando o arquivo/trecho que a sustenta. Exemplos do raciocínio reverso:
-- réplica 3x no datastore → durabilidade alta (P7); cache no caminho quente +
-  read-replicas → read-heavy e SLA de latência apertado (P3, P7); fila/broker →
-  fan-out assíncrono e picos (P4); índice de unicidade/transação → unicidade exigida
-  (P5). Marque o que não dá pra inferir como `[assumed AAAA-MM-DD]`. Grave em
-  `./questions.md` (raiz). Em guiado, apresente as inferências e peça confirmação.
+## Step 2 — Invert to the Problem Gates (suggest from the evidence)
+Read the questions from the **template** `.prumo/gates/questions.md` (blank — do NOT edit
+it) and, for each gate (A→E / P1–P10), **infer** the answer from the evidence in the
+code, citing the file/excerpt that supports it. Examples of the reverse reasoning:
+- 3x replication on the datastore → high durability (P7); a cache on the hot path +
+  read replicas → read-heavy and a tight latency SLA (P3, P7); a queue/broker →
+  asynchronous fan-out and peaks (P4); a uniqueness index/transaction → uniqueness
+  required (P5). Mark what cannot be inferred as `[assumed YYYY-MM-DD]`. Write it to
+  `./questions.md` (root). In guided mode, present the inferences and ask for confirmation.
 
-## Passo 3 — Destilar o `intent.json` fino (sem solução)
-A partir do Gate A, escreva o intent: `problem`, `goal`, `scope_in[]`/`scope_out[]`,
-`context_assumptions[]` qualitativas. Duas barreiras, agora invertidas:
-- **intenção/solução**: NENHUM componente/tecnologia/padrão do Passo 1 entra no
-  enunciado (Redis/Kafka/sharding pertencem a P8 "tech mandatória" ou ao design, não
-  ao problema);
-- **intenção/derivação**: não enumere a lista funcional nem números — isso é
+## Step 3 — Distill the thin `intent.json` (no solution)
+From Gate A, write the intent: `problem`, `goal`, `scope_in[]`/`scope_out[]`,
+qualitative `context_assumptions[]`. Two barriers, now inverted:
+- **intent/solution**: NO component/technology/pattern from Step 1 enters the
+  problem statement (Redis/Kafka/sharding belong to P8 "mandatory tech" or to the design,
+  not to the problem);
+- **intent/derivation**: do not enumerate the functional list or numbers — that is
   `/prumo.requirements`.
-Rode uma **revisão adversarial de contexto limpo** (no Claude Code, um subagente Task)
-que caça vazamento de solução no enunciado — se achar tecnologia no `problem`, mova
-para P8 e reescreva. Schema: `templates/schemas/intent.schema.json`.
+Run a **clean-context adversarial review** (in Claude Code, a Task subagent)
+that hunts for solution leakage in the problem statement — if it finds technology in
+`problem`, move it to P8 and rewrite. Schema: `templates/schemas/intent.schema.json`.
 
-## Passo 4 — Emitir o seed
-Monte um bloco **`SEED PARA /prumo.init`** = enunciado (Passo 3) + Problem Gates
-respondidos com evidência (Passo 2) + um `leak-check` confirmando que o enunciado não
-cita tecnologia. Esse bloco é o **prompt extraído**. Em automático, grave também
-`intent.json` e `questions.md` para o init seguir direto.
+## Step 4 — Emit the seed
+Assemble a **`SEED FOR /prumo.init`** block = problem statement (Step 3) + Problem Gates
+answered with evidence (Step 2) + a `leak-check` confirming that the problem statement
+does not name technology. This block is the **extracted prompt**. In automatic mode, also
+write `intent.json` and `questions.md` so that the init can go straight on.
 
-## Passo 5 — Validação por round-trip (recomendado)
-Rode o seed por `/prumo.requirements` → `/prumo.design` e **compare** o `design.json`
-gerado com os componentes/arestas reais do Passo 1. Cada divergência é uma **lacuna no
-seed** (uma garantia ou número que o problema não capturou) — endereça e re-emita.
-Convergência = o seed reconstrói o projeto.
+## Step 5 — Round-trip validation (recommended)
+Run the seed through `/prumo.requirements` → `/prumo.design` and **compare** the generated
+`design.json` with the real components/edges from Step 1. Each divergence is a **gap in
+the seed** (a guarantee or number the problem did not capture) — address it and re-emit.
+Convergence = the seed reconstructs the project.
